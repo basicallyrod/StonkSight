@@ -7,7 +7,7 @@ let IEX_URI = 'https://cloud.iexapis.com/stable/'
 let token = process.env.IEX_TOKEN
 
 export const getPrice = (ticker) => {
-    axios.get(`https://cloud.iexapis.com/stable/stock/${ticker}/quote?token=pk_f2b12e738efc48ffbac89e2a756fb545`)
+    axios.get(`https://cloud.iexapis.com/stable/stock/${ticker}/quote?token=${token}`)
     .then(res => {
         if(res.ok){
             throw new Error(`Request failed with status ${res.status}`)
