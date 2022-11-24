@@ -174,9 +174,9 @@ function ChartDiv() {
                 {/* button will trigger onClick and change the view from line to candlestick */}
 
             
-                {/* <svg className = "svgEle"
+                <svg className = "svgEle"
                     ref = {svgRef}
-                /> */}
+                />
                 {/* <CandlestickChart chartData = {tickerHistoricalPrices} ref = {svgRef}/> */}
                 {/* if (view === false)
                 <CandlestickChart/> */}

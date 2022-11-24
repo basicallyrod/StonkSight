@@ -1,23 +1,59 @@
 import * as d3 from "d3"
 import { useState, useEffect, useRef, forwardRef} from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
-const CandlestickChart = forwardRef((chartData, ...ref) => {
+//this function takes in data from the container/candlestickchart.js and renders a chart
+
+/**
+ * 
+ * @param {*} chartData {
+ *  chartDate,
+ *  chartOpen,
+ *  chartClose,
+ *  chartHigh,
+ *  chartLow
+ * 
+ * }
+ * @returns svg div
+ */
+const CandlestickChart = ({chartData}) => {
+
+
+    //use the index passed to get the ticker's historicalPrice from the state
+    const {core, isLoading, isError, message} = useSelector((state) => state.core)
+
+
+    //creates an empty ref for the svg to be generated to
+    const svgRef = useRef(null)
+    // console.log(index)
+
+    // console.log(core.historicalPrice[index])
+
+
+    // sets the chartData for the svg to the array 
+
+
+    // sets all the variables needed to generate the chart
+    // const chartData = core.historicalPrice[index];
+    // console.log(props)
+    // console.log(props.props.key)
+    // console.log(props.key)
+    console.log(chartData)
+
+    //creates the parameters for generating the svg image of the chart
           
     const xFormat = "%b %d";
     const yFormat = "~f";
 
-    const chartDate = [d3.map(chartData => {return new Date(chartData.Date.slice(0,10))})];
-    const chartOpen = [d3.map(chartData => {return chartData.Open})];
-    const chartClose = [d3.map(chartData => {return chartData.Close})];
-    const chartHigh = [d3.map(chartData => {return chartData.Low})];
-    const chartLow = [d3.map(chartData => {return chartData.High})];
+    // const chartDate = [chartData.map(day => {return new Date(day.Date.slice(0,10))})];
+    // const chartOpen = [chartData.map(day => {return day.Open})];
+    // const chartClose = [chartData.map(day => {return day.Close})];
+    // const chartHigh = [chartData.map(day => {return day.Low})];
+    // const chartLow = [chartData.map(day => {return day.High})];
     const title = 'AAPL';
-    const X = d3.map(chartDate, x => x);
-    const Yo = d3.map(chartOpen, x => x);
-    const Yc = d3.map(chartClose, x => x);
-    const Yh = d3.map(chartHigh, x => x);
-    const Yl = d3.map(chartLow, x => x);
-    const I = d3.range(X[0].length);
+
+
+    //sets up the image h, w, and margins
     const marginTop = 20;
     const marginRight = 30;
     const marginBottom = 30;
@@ -25,21 +61,41 @@ const CandlestickChart = forwardRef((chartData, ...ref) => {
     const width = 1400;
     const height = 800;
 
-    const minDay = new Date(d3.min(chartDate[0]));
-    const maxDay = new Date(d3.max(chartDate[0]));
 
+    //generates the OHLC 
+    const X = d3.map(chartData.chartDate, x => x);
+    const Yo = d3.map(chartData.chartOpen, x => x);
+    const Yc = d3.map(chartData.chartClose, x => x);
+    const Yh = d3.map(chartData.chartHigh, x => x);
+    const Yl = d3.map(chartData.chartLow, x => x);
+
+    //I is the index we are using for the chart object
+    const I = d3.range(X[0].length);
+
+
+
+
+    //sets up the domain of the chart 
+
+    const minDay = new Date(d3.min(chartData.chartDate[0]));
+    const maxDay = new Date(d3.max(chartData.chartDate[0]));
+
+    // this is the sets the domain in terms of days
     const weeks = (start, stop, stride) => d3.utcMonday.every(stride).range(start, +stop +1);
     const weekdays = (start, stop) => {
         d3.utcDays(start, stop)
     };//.filter(d => d.getUTCDay() !== 0 && d.getUTCDay() !== 6)
 
-    const xTicks = weeks(d3.min(chartDate[0]), d3.max(chartDate[0]), 2);
+
+    //sets up the x axis line and scale
+    const xTicks = weeks(d3.min(chartData.chartDate[0]), d3.max(chartData.chartDate[0]), 2);
     const xPadding = 0.2;
     const xDomain = d3.utcDays(minDay, maxDay).filter(d => d.getUTCDay() !== 0 && d.getUTCDay() !== 6);
     const xRange = [marginLeft, width - marginRight];
     const xScale = d3.scaleBand().domain(xDomain).range(xRange).padding(xPadding);
     const xAxis = d3.axisBottom(xScale).tickFormat(d3.utcFormat(xFormat)).tickValues(xTicks);
 
+    //sets up the y axis line and scale
     const yDomain = [0, d3.max(Yh[0])];
     const yRange = [height - marginBottom, marginTop];
     const yLabel = "Price $";
@@ -47,12 +103,15 @@ const CandlestickChart = forwardRef((chartData, ...ref) => {
     const yScale = yType(yDomain, yRange);
     const yAxis = d3.axisLeft(yScale).ticks(height / 100, yFormat);
 
+
+    //sets up the line used for the candlestick
     const stroke = "currentColor";
     const strokeLinecap = "round";
     const colors = ["$4daf4a", "#999999", "#e41a1c"];
 
 
-    const svg = d3.select(ref.current)
+    // generate the chart using the stated variables to the ref
+    const svg = d3.select(svgRef.current)
     // .append("svg")
     .attr("width", width)
     .attr("height", height)
@@ -241,15 +300,8 @@ const CandlestickChart = forwardRef((chartData, ...ref) => {
     .attr("fill", "currentColor")
     .attr("text-anchor", "start")
     .text(yLabel)); 
-
-    return (
-        <>
-            <svg className = "svgEle"
-                ref = {ref.current}
-            />
-        </>
-
-    )
-})
+    // })
+    return svg.node;
+}
 
 export {CandlestickChart}
