@@ -3,6 +3,7 @@ import coreService from './coreService'
 
 const initialState = {
     latestPrice: [],
+    historicalData: [],
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -44,11 +45,32 @@ export const getPrice = createAsyncThunk('lists/getTickerPrice',
     }
 )
 
+export const getBulkLatestPrice = createAsyncThunk('lists/getBulkLatestPrice',
+    async (list, thunkAPI) => {
+        try{
+            if(list == null) {
+                return
+            }
+            else {
+                console.log(list)
+                console.log(`coreSlice getBulkLatestPrice: ${list}`)
+
+                return coreService.getBulkLatestPrice(list);
+            }
+        } catch (error) {
+            const message = (error.response && error.response.data && error.response.data.message)
+            error.message ||
+            error.toString()
+        return thunkAPI.rejectWithValue(message)      
+        }
+    }
+)
+
 export const getOHLC = () => {
 
 }
 
-export const getHistoricalData = createAsyncThunk('lists/getHistorialData',
+export const getHistoricalData = createAsyncThunk('lists/getHistoricalData',
     async({ticker, range}, thunkAPI) => {
         try{
             if(ticker == null ){
@@ -82,14 +104,28 @@ export const latestPriceSlice = createSlice({
         })
         .addCase(getPrice.fulfilled, (state, action) => {
             state.isLoading = false
-            state.isSucess = true
+            state.isSuccess = true
             state.latestPrice.push(action.payload)
         })
         .addCase(getPrice.rejected, (state, action) => {
             state.isLoading = false
-            state.isSucess = true
+            state.isSuccess = true
             state.latestPrice.push(action.payload)
         })
+        .addCase(getBulkLatestPrice.pending, (state) => {
+            state.isLoading = true
+        })
+        .addCase(getBulkLatestPrice.fulfilled, (state, action) => {
+            state.isLoading = false
+            state.isSuccess = true
+            state.latestPrice.push(action.payload)
+        })
+        .addCase(getBulkLatestPrice.rejected, (state, action) => {
+            state.isLoading = false
+            state.isSuccess = true
+            state.latestPrice.push(action.payload)
+        })
+        
     }
 })
 

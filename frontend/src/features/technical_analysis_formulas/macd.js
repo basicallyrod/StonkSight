@@ -98,7 +98,25 @@ let period1 = 26;
 //     return rolling_ema_value;
 // }
 
-const macd = (prices, period, period1) => {
+const macd = (data) => {
+    console.log(data)
+    let macd_value_arr = []
+    let macd_date_arr = []
+
+    let prices = data.chartClose[0];
+    console.log(prices)
+
+    // let prices = 
+    //     [12, 14, 15, 16, 20, 
+    //     25, 18, 17, 23, 25, 
+    //     28, 29, 30, 26, 31, 
+    //     35, 38, 40, 44, 48, 
+    //     52, 55, 58, 60, 56,
+    //     58, 61, 64, 66, 71,
+    //     ];
+    let period = 12;
+    let period1 = 26;
+
     // console.log(`rolling_ema(prices, 12) : ${rolling_ema(prices, period)}`)
     // console.log(`rolling_ema(prices, 26) : ${rolling_ema(prices, period1)}`)
     // console.log(rolling_ema(prices, 26))
@@ -107,14 +125,23 @@ const macd = (prices, period, period1) => {
     // const temp = prices.length - 12 - 1;
     // const ema26_length = prices.length - 26 - 1;
 
-    const macd_arr = []
     let ema12 = rolling_ema(prices, period)
     let ema26 = rolling_ema(prices, period1)
 
-    for(let i = 0; i < ema26.length; i++){
-        console.log(ema12.length - ema26.length + i)
-        let macd_value = ema12[ema12.length - ema26.length + i] - ema26[i]
-        macd_arr.push(macd_value)
+    console.log(ema12)
+    console.log(ema26)
+
+    let macd_max_length = ema12.length - ema26.length;
+
+
+    for(let i = 0; i <= ema26.length - 1; i++){
+        console.log(i)
+        console.log(data.chartDate[0][i + period1 + 1])
+        console.log(ema12[i + 13])
+        console.log(ema26[i])
+        let macd_value = ema12[i + 13] - ema26[i]
+        macd_value_arr.push(macd_value)
+        macd_date_arr.push(data.chartDate[0][i + period1 + 1])
 
         //wanna get the starting position of 14(18 elements)
         //18 - 4
@@ -127,11 +154,17 @@ const macd = (prices, period, period1) => {
 
     // const tempi = temp 
 
-    console.log(macd_arr)
-    return macd_arr;
+    console.log(macd_value_arr)
+    console.log(macd_date_arr)
+    let macd_object = {
+        macd_date_arr,
+        macd_value_arr
+    }
+    console.log(macd_object)
+    return macd_object;
 }
 
-//using rolling_ema function, average the macd_arr 
+//using rolling_ema function, average the macd_value_arr 
 const signal = (prices1, period, period1) => {
     let signal_arr = []
     const signal_line = rolling_ema(macd(prices1, period, period1), 9)

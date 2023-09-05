@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef} from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch, connect} from 'react-redux'
 import {toast} from 'react-toastify' 
 import { useForm } from 'react-hook-form';
 import {ListForm} from './ListForm'
@@ -10,7 +10,7 @@ import {TickerItem} from '../components/commonElements/list/TickerItem'
 import { ModalProvider } from 'styled-react-modal';
 import {Spinner} from '../components/commonElements/spinner/spinner.jsx'
 import {createList, getLists, deleteList, addTicker, deleteTicker} from '../features/lists/listSlice'
-import {getPrice, reset} from '../features/iex/core/latestPriceSlice'
+import {getPrice, getBulkLatestPrice, reset} from '../features/iex/core/latestPriceSlice'
 import Home from "../components/pages/home/index.js"
 import {Button} from "../components/commonElements/buttons/index.js"
 import Form from '../components/commonElements/list'
@@ -35,11 +35,15 @@ function WatchlistContainer() {
     const {historicalPrice} = useSelector((state) => state.historicalPrice)//react redux state
     let [selectedTickers, setSelectedTickers] = useState([])
     let [watchlistArray, setWatchlistArray] = useState([])
+    let [priceStack, setPriceStack] = useState([]);
+    let [tickerQueue, setTickerQueue] = useState([]);
+
+    let [watchlistDataArray, setWatchlistDataArray] = useState([])
     let [tickerPriceArray,setTickerPriceArray] = useState([])
     let [tnaCounter, setTnaCounter] = useState(0)
     let [priceObject, setPriceObject] = useState([])
     let [isOn, setIsOn] = useState([])
-
+    
     const list = useRef();
 
     let tempSelectedTickers = []
@@ -57,6 +61,8 @@ function WatchlistContainer() {
         },
 
     ]
+
+    //watchlistStates aren't being used for handling current watchlist being watched so delete later
 
     let watchlistsStateContent = [];
 
@@ -106,8 +112,22 @@ function WatchlistContainer() {
     }
 
     useEffect(() => {
-        console.log(watchlistsState);
+        // console.log(watchlistsState);
     }, [watchlistsState]);
+
+
+    //Delete from above
+
+    const mapDispatchToProps = (dispatch) => ({
+
+        fetchAllData: () => {
+            priceStack.map((ticker) => dispatch(getPrice(ticker)))
+        }
+        
+        }
+    )
+
+    
     
     //update chartData so that it can be used by the function outside of this scope
     const tickerHistoricalData = async (ticker, range, index) => {
@@ -128,43 +148,66 @@ function WatchlistContainer() {
     }
     //change the state of isOn at a specific index
     const handleToggle = (e, id , id1) => {
-        const updatedIsOn = {...watchlistArray[id].tickerList[id1], isOn: !watchlistArray[id].tickerList[id1].isOn}
-        
-        
-        let listObject = {...watchlistArray[id]}
+        // console.log(e)
+        // console.log(id)
+        // console.log(id1)
+        // console.log(priceObject)
+        // console.log(priceObject[0][id])
+        // console.log(priceObject[0][id].list[id1])
+        const updatedIsOn = {...priceObject[0][id].list[id1], isOn: !priceObject[0][id].list[id1].isOn}
+        console.log(updatedIsOn)
+
+        let listObject = {...priceObject[0][id]}
+        // console.log(listObject)
 
         // //Slice the list & ticker out of the button pressed
-        const newwatchlistArray = [
-            ...watchlistArray[id].tickerList.filter(a => a.index !== id1)
+        const newPriceObjectArray = [
+            ...priceObject[0][id].list.filter(a => a.itemId !== id1)
         ]
+        // console.log(newPriceObjectArray)
+        // console.log(priceObject[0][id].list.filter(a => a.itemId !== id1))
 
-        // //Update the tickerList Array with the new info
+        //Update the tickerList Array with the new info
         const slicedTNATicker = [
-            ...newwatchlistArray.slice(0, id1), //items before the insertion point
+            ...priceObject[0][id].list.slice(0, id1), //items before the insertion point
             updatedIsOn, //updated isOn at the index
-            ...newwatchlistArray.slice(id1) //items after the insertion point
-        ]
-
+            ...priceObject[0][id].list.slice(id1+1) //items after the insertion point
+        ]  
+        // console.log(slicedTNATicker)
+        
         //shove the slicedTNATicker 
         listObject = {
-            ...watchlistArray[id], tickerList: slicedTNATicker
-        }
+            ...priceObject[0][id], list: slicedTNATicker
+        }   
+        // console.log(listObject)
+        
+        // //filter using the id as the key
+        const newPriceObject = [
+            ...priceObject[0].filter(a => a.listId !== id)
+        ]
+        // console.log(newPriceObject)
 
-        //filter using the id as the key
-        const newwatchlistArray1 = [
-            ...watchlistArray.filter(a => a.key !== id)
-        ]
         const slicedTNAList = [
-            ...newwatchlistArray1.slice(0,id),
+            ...priceObject[0].slice(0,id),
             listObject,
-            ...newwatchlistArray1.slice(id)
+            ...priceObject[0].slice(id+1)
         ]
-        setWatchlistArray(slicedTNAList)
+        // console.log(priceObject[0].slice(0,id))
+        
+        // console.log(priceObject[0].slice(id + 1))
+
+        // console.log(slicedTNAList)
+
+
+        setPriceObject([
+            slicedTNAList,
+            ...priceObject
+        ])
         //remove the ticker if it is in the array
-        if(selectedTickers.includes(watchlistArray[id].tickerList[id1].symbol)){
+        if(selectedTickers.includes(priceObject[0][id].list[id1].symbol)){
             setSelectedTickers(
                 selectedTickers.filter(t =>
-                    t !== watchlistArray[id].tickerList[id1].symbol  
+                    t !== priceObject[0][id].list[id1].symbol
                 )
             )
         }
@@ -172,27 +215,81 @@ function WatchlistContainer() {
         else {
             setSelectedTickers([
                 ...selectedTickers,
-                watchlistArray[id].tickerList[id1].symbol
+                priceObject[0][id].list[id1].symbol
             ])
         }
+        
+        
+        // const updatedIsOn = {...watchlistArray[id].tickerList[id1], isOn: !watchlistArray[id].tickerList[id1].isOn}
+        
+        
+        // let listObject = {...watchlistArray[id]}
+
+        // // //Slice the list & ticker out of the button pressed
+        // const newwatchlistArray = [
+        //     ...watchlistArray[id].tickerList.filter(a => a.index !== id1)
+        // ]
+
+        // // //Update the tickerList Array with the new info
+        // const slicedTNATicker = [
+        //     ...newwatchlistArray.slice(0, id1), //items before the insertion point
+        //     updatedIsOn, //updated isOn at the index
+        //     ...newwatchlistArray.slice(id1) //items after the insertion point
+        // ]
+
+        // //shove the slicedTNATicker 
+        // listObject = {
+        //     ...watchlistArray[id], tickerList: slicedTNATicker
+        // }
+
+        // //filter using the id as the key
+        // const newwatchlistArray1 = [
+        //     ...watchlistArray.filter(a => a.key !== id)
+        // ]
+        // const slicedTNAList = [
+        //     ...newwatchlistArray1.slice(0,id),
+        //     listObject,
+        //     ...newwatchlistArray1.slice(id)
+        // ]
+        // setWatchlistArray(slicedTNAList)
+        // //remove the ticker if it is in the array
+        // if(selectedTickers.includes(watchlistArray[id].tickerList[id1].symbol)){
+        //     setSelectedTickers(
+        //         selectedTickers.filter(t =>
+        //             t !== watchlistArray[id].tickerList[id1].symbol  
+        //         )
+        //     )
+        // }
+        // //add the ticker if not in the array
+        // else {
+        //     setSelectedTickers([
+        //         ...selectedTickers,
+        //         watchlistArray[id].tickerList[id1].symbol
+        //     ])
+        // }
     }
 
     const [seconds, setSeconds] = useState(0);
 
 
-    //change this to take in an index and change the tickerList
-    const listData = async () => {
-        const data = await dispatch(getLists())
-        return data.payload
-    }
+
+
 
     const tickerPrice = (ticker) => {
         const price = dispatch(getPrice(ticker))
         return price
     }
 
+    const bulkLatestTickerPrice = (list) => {
+        // console.log(list);
+        const prices = dispatch(getBulkLatestPrice(list))
+        return prices;
+
+    }
+
     const priceStateHelper = async() => {
         let prices = listData().then(async (res) => {
+            // console.log(res)
             let tempTickerNames = []
             let initialState = res.map(async(list,key) => {
                 let tickerList = list.tickerList.map((element, index) => {
@@ -254,33 +351,38 @@ function WatchlistContainer() {
 
     //useEffect time intervals, 5s, 10s, 30s, 1 min, 5 min, 15 min, 30 min, 
 
+    //change this to take in an index and change the tickerList
+    // const listData = async () => {
+    //     const data = await dispatch(getLists())
+    //     return data.payload
+    // }
 
     //initial loading of the user's lists
-    useEffect(() => {
-        priceStateHelper().then((res) => {
-            console.log(res)
-        })
+    // useEffect(() => {
+    //     priceStateHelper().then((res) => {
+    //         console.log(res)
+    //     })
 
-    }, [])
+    // }, [])
 
     const section1 = useRef();
     const section2 = useRef();
     const container = useRef();
 
-    useEffect(() => {
-        gsap.to(section1.current, {
-            scrollTrigger: {
-                scroller: container.current,
-                trigger: section2.current,
-                start: "center 55%",
-                markers: true,
-                toggleActions: "play complete",
-                scrub: true
-            },
-            duration: 2,
-            ease: "back"
-        })
-    }, [])
+    // useEffect(() => {
+    //     gsap.to(section1.current, {
+    //         scrollTrigger: {
+    //             scroller: container.current,
+    //             trigger: section2.current,
+    //             start: "center 55%",
+    //             markers: true,
+    //             toggleActions: "play complete",
+    //             scrub: true
+    //         },
+    //         duration: 2,
+    //         ease: "back"
+    //     })
+    // }, [])
 
     // useEffect(() => {
     //     const interval = setInterval(() => {
@@ -306,11 +408,302 @@ function WatchlistContainer() {
         }
     }, [watchlistArray, priceObject])
     //tickerPriceArray should refresh every couple seconds incase the user decides to update the list
+   
+    // Create this object and use this push it into setWatchlist
+    // {
+    //     index: index,
+    //     symbol: element,
+    //     price: res.payload.latestPrice,
+    //     changePercent: res.payload.changePercent,
+    //     isOn: false,
+    // }
+
+    //chose one of the three states: priceObject, watchlistDataArray, tickerPriceArray
+
+    const listData = () => {
+        const  data = dispatch(getLists()).then(res => setWatchlistArray(res.payload))
+        // console.log(data)
+
+        return Promise.all(data)
+    }
+
+
 
     //once we update the watchlist, then we update the latestPrice
     useEffect(() => {
         // tickerPrice
+        //this will give an array of the user's watchlists and then set the watchlist to the array of tickerlist of each watchlist
+        listData()
+
     }, [])
+
+    // useEffect(() => {
+    //     // getBulkLatestPrice
+    //     console.log(watchlistArray)
+
+    // }, [watchlistArray])
+    
+
+    //get the price of the lists
+    useEffect(() => {
+        // console.log(watchlistArray)
+        let userTickerStack = []// this is to manage the state
+        let tickerQueue1 = [] //this is manage the queue
+        if(watchlistArray !== void(0) && watchlistArray.length !== 0){
+            watchlistArray.map((data, key) => {
+                // console.log(data)
+                // console.log(data.listName)
+                // console.log(key)
+                let watchlistObject = {
+                    listName: data.listName,
+                    listId: key,
+                    list: []
+                }
+                let listTickerStack = []//use this to generate the array of array of objects for the state
+                data.tickerList.map((ticker, index) => {
+                    // console.log(key)
+                    // console.log(index)
+                    const object = {
+                        listId: key,
+                        itemId: index,
+                        symbol: ticker,
+                        latestPrice: "",
+                        changePercent: "",
+                        isOn:false,
+                    }
+                    watchlistObject.list.push(object)
+                    tickerQueue1.push(ticker)
+                })
+                // console.log(watchlistObject)
+                // console.log(listTickerStack)
+                // console.log(tickerQueue)
+                userTickerStack.push(watchlistObject)
+            })
+            // console.log(userTickerStack)
+            setPriceStack([
+                userTickerStack,
+                ...priceStack
+            ])
+            setTickerQueue(tickerQueue1)
+        }
+        // console.log(watchlistArray[0].tickerList)
+        
+        // if(watchlistArray.length > 0 && watchlistArray[0][0]) {
+        //     console.log(watchlistArray)
+        //     // watchlistArray.tickerList.map((ticker) => {
+        //     //     console.log(ticker)
+        //     //     // tickerPrice(ticker).then(res => console.log(res));
+        //     // })
+        // }
+
+    }, [watchlistArray])
+
+    useEffect(() => {
+        if(priceStack !== void(0) && priceStack.length !== 0){
+
+            //runs into the issues of once the first array (meta, aapl, nflx, goog) is empty then it would try to tickerPrice(undefined)
+
+            // console.log(priceStack)
+            // console.log(tickerQueue)
+            let data = bulkLatestTickerPrice(tickerQueue).then(res => {
+                // let data = res.payload
+                // console.log(data)
+
+                // priceStack[0].map((watchlist,key1) => {
+                //     console.log(watchlist)
+                //     watchlist.map((ticker, key2) => {
+                //         console.log(ticker)
+                //         for(let key in data){
+                //             if(key === ticker.symbol){
+                //                 console.log(ticker.symbol)
+                //                 console.log(key)
+                //                 console.log(data[key])
+                //                 console.log(data[key].quote.latestPrice)
+                //                 let temp = ticker;
+                //                 temp.latestPrice = data[key].quote.latestPrice
+                //                 temp.changePercent = data[key].quote.extendedChangePercent
+                //                 console.log(temp)
+                                
+                //                 setPriceObject([
+                //                     ...priceObject,
+                //                     temp
+
+                //                 ])
+
+                //             }
+
+                //         }
+
+                //     })
+
+                // })
+                let temp = res.payload
+                // console.log(temp)
+
+                let tempPriceStackObject = []
+                // console.log(priceStack[0][0].list)
+                // console.log(priceStack[0])
+                // console.log(priceStack)
+               
+                for(let watchlist in priceStack[0]){
+                    let tickerPriceObject = []
+                    let tempWatchlistObject = priceStack[0][watchlist]
+                    // console.log(tempWatchlistObject)
+                    // console.log(priceStack[0][watchlist])
+                    // console.log(priceStack[0][watchlist].list)
+                    for(let ticker in priceStack[0][watchlist].list){
+                        // console.log(priceStack[0][watchlist].list[ticker])
+                        for(let key in temp){
+                            if(priceStack[0][watchlist].list[ticker].symbol === temp[key].quote.symbol){
+                                let tempObject = priceStack[0][watchlist].list[ticker];
+                                tempObject.latestPrice = temp[key].quote.latestPrice
+                                tempObject.changePercent = temp[key].quote.extendedChangePercent
+
+                                // console.log(tempObject)
+                                // console.log(temp[key])
+                                tickerPriceObject.push(tempObject)
+                            }
+                        }
+
+                    }
+
+                    tempWatchlistObject.list = tickerPriceObject
+
+                    // console.log(tempWatchlistObject)
+                    // console.log
+                    // let tickerPriceObject = []
+                    // for(let ticker in priceStack[0][watchlist]){
+                    //     // console.log()
+                        
+                    //     console.log(priceStack[0][watchlist].list)
+                    //     // console.log(watchlist[ticker].list)
+                    //     console.log(priceStack[0][watchlist][ticker])
+
+                    //     for(let key in temp){
+                            
+                    //         if(priceStack[0][watchlist].list[ticker].symbol === temp[key].quote.symbol){
+                                // let tempObject = priceStack[0][watchlist][ticker];
+                                // tempObject.latestPrice = temp[key].quote.latestPrice
+                                // tempObject.changePercent = temp[key].quote.extendedChangePercent
+
+                                // console.log(tempObject)
+                                // console.log(temp[key])
+                                // tickerPriceObject.push(tempObject)
+
+
+                    //         }
+
+                            
+                            
+                    //         // console.log(priceStack[0][data][data1][key])
+                    //     }
+                        
+                    // }
+                    tempPriceStackObject.push(tempWatchlistObject)
+                }
+                setPriceObject([
+                    ...priceObject,
+                    tempPriceStackObject
+                ])
+                // setPriceObject([
+                //     ...priceObject,
+                //     tempPriceStackObject
+                // ])
+                // console.log(tempPriceStackObject)
+
+
+                
+
+                // priceStack.map((watchlist) => {
+                //     console.log(watchlist)
+                //     watchlist.map((ticker) => {
+                //         let test = res.payload;
+                //         console.log(test)
+                //         // console.log(test.filter(ticker.symbol))
+                //         console.log(ticker.symbol)
+                //         // console.log(res.payload.filter(ticker))
+    
+                //     })
+                // })
+
+
+                return res.payload
+            });
+
+            // console.log(data)
+
+            //iterate through the priceStack array of arrays and fill in the changePercent & latestPrice
+
+
+
+            //dispatch the getBulkLatestPrice
+            
+
+
+
+            // console.log(priceStack[0])
+            // console.log(priceStack[0][0])
+            // console.log(priceStack[0][0][0])
+            
+            // priceStack[0][0].map(data,)
+            // tickerPrice(priceStack[0][0][0].symbol)
+            // .then(data => {
+            //     console.log(priceStack[0][0][0])
+            //     console.log(data.payload)
+            //     let tempObject = priceStack[0][0][0]
+            //     tempObject.latestPrice = data.payload.latestPrice
+            //     tempObject.changePercent = data.payload.changePercent
+            //     console.log(tempObject)
+            //     // priceObject()
+
+            //     return tempObject;
+
+            // }) 
+            // .then(res => {
+            //     console.log(res)
+            //     setPriceObject([
+            //         ...priceObject,
+            //         res
+            //     ])   
+            // })
+
+            //example of what not to do; will cause batch requests instead of pending/fulfilling one by one
+            // priceStack[0].map((data, index) => {
+            //     console.log(data)
+            //     data.map((data1, key) => {
+            //         console.log(data1)
+            //         tickerPrice(data1.symbol)
+            //     })
+            // })
+        }
+
+
+            // })
+
+            // .then(setPriceStack(priceStack.slice(1)))
+        
+
+
+    }, [priceStack, tickerQueue])
+
+    //decrement the priceStack
+    useEffect(() => {
+        if(priceStack !== void(0) && priceStack.length !== 0){
+            // fetchAllData()
+            // console.log(priceObject)
+            // console.log(priceStack)
+            // console.log(priceStack[0][0])
+            // setPriceStack(priceStack.slice(1))
+            // console.log(priceStack[0][0].slice(1))
+            // console.log(priceStack[0][0].slice(1))
+            // setPriceStack([
+            //     priceStack[0][0].slice(1),
+            //     ...priceStack
+            // ])
+        }
+        // console.log(priceObject)
+    
+    }, [priceObject])
 
     const toggleButtonHelper = (element) => {
         return (
@@ -329,23 +722,40 @@ function WatchlistContainer() {
     }
     
     // const ev
-    const ToggleButton = useCallback(({list, list_key}) => {
+    const ToggleButton = useCallback((list) => {
+        // console.log(list)
+        // console.log(list.list_key)
+        // console.log(list_key)
         // let listElements = []
-        const listItems = list.tickerList.map((ticker, key)=> {
-            console.log(ticker.changePercent)
-            
-            return(                
-                <>
-                        <Form.StyledButton list_key = {list_key} key = {ticker.index} changePercent = {ticker.changePercent} element = {ticker} isOn = {ticker.isOn} onClick = {(e) => {handleToggle(e, list_key, ticker.index)}}>
-                                {/* <ToggleRow list_key = {list_key} key = {ticker.index} element = {ticker} isOn = {ticker.isOn} onClick = {(e) => {handleToggle(e, list_key, ticker.index)}}> */}
-                                    
-                                    <>{ticker.symbol} {ticker.price}</>    
-                                {/* </ToggleRow>          */}
+        const listItems = list.list.map((ticker, itemId)=> {
+            // console.log(ticker)
+            // console.log(itemId)
+            // console.log(list.list_key)
 
-                        </Form.StyledButton> 
+            // console.log(ticker.symbol)
+            // console.log(ticker.latestPrice)
+
+            return(
+                <>
+                    <Form.StyledButton list_key = {list.list_key} itemId = {itemId} changePercent = {ticker.changePercent} element = {ticker} isOn = {ticker.isOn} onClick = {(e) => {handleToggle(e, list.list_key, itemId)}}>
+                        <>{ticker.symbol} : {ticker.latestPrice}</>
+                    </Form.StyledButton>
                 </>
             )
+            
+            // return(                
+            //     <>
+            //             <Form.StyledButton list_key = {list_key} key = {ticker.index} changePercent = {ticker.changePercent} element = {ticker} isOn = {ticker.isOn} onClick = {(e) => {handleToggle(e, list_key, ticker.index)}}>
+            //                     {/* <ToggleRow list_key = {list_key} key = {ticker.index} element = {ticker} isOn = {ticker.isOn} onClick = {(e) => {handleToggle(e, list_key, ticker.index)}}> */}
+                                    
+            //                         <>{ticker.symbol} {ticker.price}</>    
+            //                     {/* </ToggleRow>          */}
+
+            //             </Form.StyledButton> 
+            //     </>
+            // )
         })
+        // return listItems
         return (
             <>{listItems}</>
         )
@@ -393,6 +803,19 @@ function WatchlistContainer() {
         height: "5vh",
         width: "100%",
         background: "limegreen",
+        // border:,
+        // border-color: "red"
+    }
+
+    const tickerList = (watchlist) => {
+        watchlist.map((item) => {
+            console.log(item.symbol)
+        })
+        return(
+            <>
+
+            </>
+        )
     }
 
 
@@ -400,8 +823,26 @@ function WatchlistContainer() {
         <>
             <Home>
                 {/**Wrapper holds the chart part(in home.js) */}
+
                 <Home.Wrapper className = "leftColumn">
                     {/* Function: Creates a new watchlist */}
+                    {/* <ThemeProvider theme = {}> */}
+                        <Home.BalanceWrapper>
+
+                            <Home.Title>
+                                Balance:  
+                            </Home.Title>
+                                    
+                            <Form.StyledTHead>
+                                {/* <Form.StyledTR> */}
+                                    <th>Watchlist</th>
+                                {/* </Form.StyledTR> */}
+                                <ListForm/>
+                            </Form.StyledTHead>
+                        </Home.BalanceWrapper>
+                    {/* </ThemeProvider> */}
+
+                    {/* <Form></Form> */}
                     
                     {/**Form controls the watchlist part */}
                     <Form className = "leftColumn Wrapper">
@@ -411,34 +852,118 @@ function WatchlistContainer() {
                             
                             {/* <Form.StyledTable theme = {table}> */}
 
-                                
-                                <Form.StyledTHead>
-                                    {/* <Form.StyledTR> */}
-                                        <th>Watchlist</th>
-                                    {/* </Form.StyledTR> */}
-                                </Form.StyledTHead>
+
                                 {/* <Form.StyledTR> */}
 
                                 {/* <Form.Wrapper1> */}
-                                    <ListForm/>
+                                    
                                 {/* </Form.Wrapper1> */}
 
                                     
                                 <Form.StyledTBody>
+                                    {priceObject[0] && priceObject[0].length !== 0 &&
+
+
+                                        //use this loop to manage the multiple watchlists of the user
+                                        priceObject[0].map((list, key) => {
+                                            // console.log(list)
+                                            // console.log(key)
+                                            return(
+                                                <>
+                                                    <Form.StyledTD>
+                                                        <h3>{list.listName}</h3>
+
+                                                        <StyledButton
+                                                                listId = {list.id}
+                                                                onClick = {(e) => {handleDelList(e, list.id)}}
+                                                        >
+                                                            Delete List
+                                                        </StyledButton>
+
+                                                        <TickerListForm 
+                                                            listId = {list.id}
+                                                        />                                                        
+                                                        <Form.StyledTBody1>
+                                                                <ThemeProvider theme={tickerButton}>
+                                                                    <ToggleButton
+                                                                        list = {list.list}
+                                                                        list_key = {key}
+                                                                    />
+                                                                </ThemeProvider>                                                           
+                                                        </Form.StyledTBody1>
+                                                    </Form.StyledTD>
+                                                </>
+                                            )
+         
+                                            // watchlist.map((item) => {
+                                            //     console.log(item)
+
+                                            // })
+                                            // return(
+                                            //     <>
+                                            //         <Form.StyledTD>
+
+                                            //                 <h3>{list.listName}</h3>
+                                     
+                                            //                 <StyledButton
+                                            //                     listId = {list.id}
+                                            //                     onClick = {(e) => {handleDelList(e, list.id)}}
+                                            //                 >
+                                            //                     Delete List
+                                            //                 </StyledButton>
+
+                                            //                 <TickerListForm 
+                                            //                     listId = {list.id}
+                                            //                 />
+
+                                            //                 <Form.StyledTBody1>
+                                                                
+                                                                    // <ThemeProvider theme={tickerButton}>
+                                                                    //     <ToggleButton
+                                                                    //         list = {list}
+                                                                    //         list_key = {key}
+                                                                    //     />
+
+                                                                    //     <ToggleButton
+                                                                    //             list = {list}
+                                                                    //             list_key = {key}
+                                                                    //         /> 
+                                                                    // </ThemeProvider>
+                                                                
+
+
+
+                                            //                 </Form.StyledTBody1>
+
+                                            //         </Form.StyledTD>
+                                            //     </>
+                                            // )
+                                            
+                                            //use this to create the div of the list in the watchlist div
+                                            // watchlist.map((list) => {
+                                            //     console.log(list)
+
+
+                                            //     //Create multiple buttons in the list with this function
+                                            //     // list.map((ticker) => {
+                                            //     //     console.log(ticker)
+                                            //     // })
+
+                                            //     // console.log(ticker)
+                                            // })
+                                        })
+                                        // <tr>priceObject[0]</tr>
+                                    } 
+                                </Form.StyledTBody>
+                                {/* <Form.StyledTBody>
                                     {watchlistArray.length !== 0 &&
                                         watchlistArray.map((list, key) => {
                                             return(
                                                 <>
                                                     <Form.StyledTD>
-                                                    {/* <Form> */}
-                                                        
-                                                        {/* <Form.StyledTBody> */}
+
                                                             <h3>{list.listName}</h3>
-
-
-                                                            {/**
-                                                             * Delete Button
-                                                             */}                                                   
+                                     
                                                             <StyledButton
                                                                 listId = {list.id}
                                                                 onClick = {(e) => {handleDelList(e, list.id)}}
@@ -446,14 +971,10 @@ function WatchlistContainer() {
                                                                 Delete List
                                                             </StyledButton>
 
-                                                            {/**
-                                                             * Add ticker section
-                                                             */}
                                                             <TickerListForm 
                                                                 listId = {list.id}
                                                             />
 
-                                                            {/* <Form.StyledTR> */}
                                                             <Form.StyledTBody1>
                                                                 
                                                                     <ThemeProvider theme={tickerButton}>
@@ -464,26 +985,16 @@ function WatchlistContainer() {
                                                                     </ThemeProvider>
                                                                 
 
-                                                                {/* <Form.StyledButton> */}
 
-                                                                {/* </Form.StyledButton> */}
 
                                                             </Form.StyledTBody1>
-                                                            {/* </Form.StyledTR> */}
-                                                            {/* </div> */}
-                                                            {/* </Home> */}
 
-                                                        
-                                                        {/* </Form.StyledTBody> */}
-                                                        {/* <Home> */}
-                                                    {/* </Form> */}
                                                     </Form.StyledTD>
                                                 </>
                                             )
                                         })
-                                        // <tr>priceObject[0]</tr>
                                     } 
-                                </Form.StyledTBody>
+                                </Form.StyledTBody> */}
 
                                 {/* </Form.StyledTR> */}
                             {/* </Form.StyledTable> */}
@@ -493,15 +1004,29 @@ function WatchlistContainer() {
 
                 </Home.Wrapper>
 
-                <CandlestickChartContainer
-                    list = {selectedTickers}
-                />
-                <Home.NewsfeedWrapper>
 
-                </Home.NewsfeedWrapper>
+                {/* <Home.ChartWrapper
+                    className = "ChartContainer"
+                > */}
+                    <CandlestickChartContainer
+                        list = {selectedTickers}
+                    />
+                    
+                {/* </Home.ChartWrapper> */}
+
+
+
+                {/* <Home.NewsfeedWrapper
+                    className = "NewsfeedContainer"
+                >
+
+                </Home.NewsfeedWrapper> */}
             </Home>
         </>
     )
 }
 
+
+
+// connect(null, mapDispatchToProps)
 export {WatchlistContainer}

@@ -56,6 +56,30 @@ export const getHistoricalData = createAsyncThunk('lists/getHistorialData',
     }
 )
 
+export const getSpecificHistoricalDataRange = createAsyncThunk('lists/getSpecificHistoricalDataRange',
+    async({ticker, firstDay, lastDay, index}, thunkAPI) => {
+        try{
+            if(ticker == null ){
+                //do not run coreService
+                return
+            }
+            else {
+                // let firstDay = 
+                console.log((`https://cloud.iexapis.com/stable/time-series/HISTORICAL_PRICES/${ticker}/?from=${firstDay}&to=${lastDay}&token=pk_f2b12e738efc48ffbac89e2a756fb546`))
+
+                console.log(`coreSlice getHistoricalData: ${ticker} | ${firstDay} | ${lastDay}`)
+                // const token = thunkAPI.getState().auth.user.token
+                return coreService.getSpecificHistoricalDataRange(ticker, firstDay, lastDay);
+        }
+        } catch (error) {
+            const message = (error.response && error.response.data && error.response.data.message)
+            error.message ||
+            error.toString()
+        return thunkAPI.rejectWithValue(message)        
+        }
+    }
+)
+
 export const historicalPriceSlice = createSlice({
     name: 'historicalPrice',
     initialState, 
@@ -69,7 +93,7 @@ export const historicalPriceSlice = createSlice({
         })
         .addCase(getHistoricalData.fulfilled, (state, action) => {
             state.isLoading = false
-            state.isSucess = true
+            state.isSuccess = true
             // action.payload.map((index) => (
             //     state.historicalPrice.push(index)
             // ))
@@ -77,7 +101,7 @@ export const historicalPriceSlice = createSlice({
         })
         .addCase(getHistoricalData.rejected, (state, action) => {
             state.isLoading = false
-            state.isSucess = true
+            state.isSuccess = true
             // state.historicalPrice.push(action.payload)
         })
         .addCase(getSpecificHistoricalData.pending, (state) => {
@@ -85,14 +109,54 @@ export const historicalPriceSlice = createSlice({
         })
         .addCase(getSpecificHistoricalData.fulfilled, (state, action) => {
             state.isLoading = false
-            state.isSucess = true
+            state.isSuccess = true
             state.historicalPrice[action.meta.arg.index].unshift(action.payload)
             // console.log(state.historicalPrice[action.meta.arg.index])
             // state.historicalPrice.unshift(action.payload)
         })
         .addCase(getSpecificHistoricalData.rejected, (state, action) => {
             state.isLoading = false
-            state.isSucess = true
+            state.isSuccess = true
+            // state.historicalPrice.push(action.payload)
+        })
+        .addCase(getSpecificHistoricalDataRange.pending, (state) => {
+            state.isLoading = true
+        })
+        .addCase(getSpecificHistoricalDataRange.fulfilled, (state, action) => {
+            console.log(action.payload)
+            let data = action.payload
+            console.log(data)
+            state.isLoading = false
+            state.isSuccess = true
+            data.map((day) => {
+                console.log(day.priceDate)
+                if(state.historicalPrice.includes(day.priceDate)){
+                    console.log('exists')
+                }
+                else{
+                    state.historicalPrice[action.meta.arg.index].unshift(day)
+                }
+                
+            })
+            // for(let day of data){
+            //     console.log(day)
+            //     if(data.includes(day)){
+            //         continue;
+            //     }
+            //     else{
+            //         state.historicalPrice[action.meta.arg.index].unshift(day)
+            //     }
+            // }
+
+            // state.historicalPrice[action.meta.arg.index].unshift(data)
+            // state.historicalPrice[action.meta.arg.index].unshift(action.payload)
+            
+            // console.log(state.historicalPrice[action.meta.arg.index])
+            // state.historicalPrice.unshift(action.payload)
+        })
+        .addCase(getSpecificHistoricalDataRange.rejected, (state, action) => {
+            state.isLoading = false
+            state.isSuccess = true
             // state.historicalPrice.push(action.payload)
         })
         

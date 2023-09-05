@@ -85,7 +85,7 @@ const rolling_sma = (prices, rolling_period) => {
         for(let j = i - 2; j <= i; j++){
             // console.log(j)
             // console.log(j - rolling_period + 1)
-            rolling_sum += prices[j].close
+            rolling_sum += prices[j]
             
         }
         // console.log(`rolling_sum = ${rolling_sum}`)
@@ -110,12 +110,13 @@ const rolling_ema = (prices, rolling_period) => {
     if(!prices || prices.length < rolling_period){
         return [];
     }
+    console.log(prices)
     // let smoothing_period = 2;
     // for(let i = 0; i <= prices.length - 1; i++){
 
     //     let current_ema;
     //     for(let j = i - smoothing_period; j <= i; j++){
-    //         current_ema = (prices[i].close * (smoothing_period/rolling_period+1))
+    //         current_ema = (prices[i] * (smoothing_period/rolling_period+1))
     //     }
     // }
 
@@ -123,10 +124,12 @@ const rolling_ema = (prices, rolling_period) => {
 
     //calculates the first sma to be used by ema
     let first_ema_data = 0
-    for(let i = 0; i < rolling_period; i++){
-        first_ema_data += prices[i].close;
+    for(let i = 0; i <= rolling_period; i++){
+        first_ema_data += prices[i];
     } 
     let first_ema_value = first_ema_data/rolling_period;
+    console.log(first_ema_data)
+    console.log(first_ema_value)
 
     let multipler = 2/(rolling_period + 1);
     console.log(multipler)
@@ -139,25 +142,25 @@ const rolling_ema = (prices, rolling_period) => {
     let prev_ema = 0;
     //start the rolling ema calculations
     let rolling_ema_value = []
-    for(let i = rolling_period; i < prices.length; i++) {
+    for(let i = rolling_period + 1; i < prices.length; i++) {
         //current closing price iteration
-        // let closing_price = prices[i].close;
+        // let closing_price = prices[i];
 
 
         
 
-        if (i === rolling_period){
-            // ema(prices[i].close, first_ema_value)
-            prev_ema = ema(prices[i].close, first_ema_value)
+        if (i === rolling_period + 1){
+            // ema(prices[i], first_ema_value)
+            prev_ema = ema(prices[i], first_ema_value)
             rolling_ema_value.push(prev_ema)
         }
         else {
-            // ema(prices[i].close, prev_ema)
-            prev_ema = ema(prices[i].close, prev_ema)
+            // ema(prices[i], prev_ema)
+            prev_ema = ema(prices[i], prev_ema)
             rolling_ema_value.push(prev_ema)
         }
     }
-    // console.log(rolling_ema_value)
+    console.log(rolling_ema_value)
     return rolling_ema_value;
 }
 

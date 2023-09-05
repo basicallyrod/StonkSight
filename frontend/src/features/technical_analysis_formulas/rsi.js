@@ -85,8 +85,8 @@ const rsi = async(data) => {
     // console.log(loss_sum)
     let avg_gain = init_gain_sum/14
     let avg_loss = (init_loss_sum/14)
-    console.log(avg_gain)
-    console.log(avg_loss)
+    // console.log(avg_gain)
+    // console.log(avg_loss)
     let prev_avg_gain = avg_gain;
     let prev_avg_loss = avg_loss;
 
@@ -98,7 +98,7 @@ const rsi = async(data) => {
 
     let rsi_value = 100 - (100/(1+rs))
     // let rsi_value = 100 - (100/(1+(avg_gain/avg_loss)))
-    console.log(rsi_value)
+    // console.log(rsi_value)
     // let rsi_object = {
     //     rsi: rsi_value,
     //     date: data.chartDate[0][14]
@@ -115,8 +115,8 @@ const rsi = async(data) => {
         if(difference >= 0){
             prev_avg_gain = ((prev_avg_gain * 13) + difference) / 14
             prev_avg_loss = ((prev_avg_loss * 13) + 0) / 14
-            console.log(`avg gain = ${prev_avg_gain}`)
-            console.log(`avg loss = ${prev_avg_loss}`)
+            // console.log(`avg gain = ${prev_avg_gain}`)
+            // console.log(`avg loss = ${prev_avg_loss}`)
             // gain_sum += difference;
         }
         else {
@@ -131,7 +131,7 @@ const rsi = async(data) => {
         //     rsi: rsi_value,
         //     date: data.chartDate[0][i]
         // }
-        console.log(data.chartDate[0][i])
+        // console.log(data.chartDate[0][i])
 
         rsi_value_arr.push(rsi_value)
         rsi_date_arr.push(data.chartDate[0][i])
