@@ -28,21 +28,6 @@ function FooterContainer() {
                                 {/* <Github size="18"/> */}
                                 GitHub
                             </Footer.Link>
-                            <Footer.Link href="https://www.instagram.com/rbuohism/" target= "_blank">
-                                <Icon className = "Instagram" />
-                                {/* <Instagram size="18"/> */}
-                                Instagram
-                            </Footer.Link>
-                            <Footer.Link>
-                                {/* <Phone size="18"/> */}
-                                <Icon className = "Phone" />
-                                818-631-7897
-                            </Footer.Link>
-                            <Footer.Link>
-                                <Icon className = "Email" />
-                                {/* <Email size="18"/> */}
-                                rbuo@ucmerced.edu
-                            </Footer.Link>
                     </Footer.Column>
                 </Footer.Row>
             </Footer.Wrapper>
