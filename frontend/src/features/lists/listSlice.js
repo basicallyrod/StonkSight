@@ -14,8 +14,10 @@ export const createList = createAsyncThunk('lists/create',
     async (listData, thunkAPI) => {
         try {
             const token = thunkAPI.getState().auth.user.token
+            const uid = thunkAPI.getState().auth.user._id;
+            console.log(`uid: ${uid}`)
             console.log(`listSlice createList: ${listData}`)
-            return await listService.createList(listData, token)
+            return await listService.createList(listData, token, uid)
         } catch (error) {
             const message = (error.response && error.response.data && error.response.data.message)
             error.message ||
@@ -45,10 +47,12 @@ export const getLists = createAsyncThunk('lists/getAll',
 
 export const deleteList = createAsyncThunk('lists/delete', 
     async (id, thunkAPI) => {
+        console.log(id)
         try {
             const token = thunkAPI.getState().auth.user.token
+            const uid = thunkAPI.getState().auth.user._id;
             console.log(`listSlice deleteList: ${id}`)
-            return await listService.deleteList(id, token)
+            return await listService.deleteList(id, token, uid)
         } catch (error) {
             const message = (error.response && error.response.data && error.response.data.message)
             error.message ||

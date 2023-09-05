@@ -1,4 +1,4 @@
-import { Container, Wrapper, Background, 
+import { Container, Wrapper, BalanceWrapper, Wrapper1, ChartWrapper, ChartControllerWrapper, NewsfeedWrapper,  Background, 
     BackgroundContent, TexturedBody, Picture, Logo, Row, UnderlineRow, Column, Body, InnerBody, OuterBody,
     Link, StyledLink, Title, Subtitle,
     Education, Project, LeftColumn, RightColumn, Text,
@@ -11,6 +11,21 @@ const Home = ({ children, ...restProps }) => {
 
 Home.Wrapper = ({children, ...restProps}) => {
     return <Wrapper {...restProps}>{children}</Wrapper>;
+};
+Home.BalanceWrapper = ({children, ...restProps}) => {
+    return <BalanceWrapper {...restProps}>{children}</BalanceWrapper>;
+};
+Home.Wrapper1 = ({children, ...restProps}) => {
+    return <Wrapper1 {...restProps}>{children}</Wrapper1>;
+};
+Home.ChartWrapper = ({children, ...restProps}) => {
+    return <ChartWrapper {...restProps}>{children}</ChartWrapper>;
+};
+Home.ChartControllerWrapper = ({children, ...restProps}) => {
+    return <ChartControllerWrapper {...restProps}>{children}</ChartControllerWrapper>;
+};
+Home.NewsfeedWrapper = ({children, ...restProps}) => {
+    return <NewsfeedWrapper {...restProps}>{children}</NewsfeedWrapper>;
 };
 
 Home.Background = ({children, ...restProps}) => {

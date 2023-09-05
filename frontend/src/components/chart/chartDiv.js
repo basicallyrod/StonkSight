@@ -7,7 +7,7 @@ import * as d3 from "d3"
 import { useForm } from 'react-hook-form';
 
 import {createList, getLists, deleteList, reset} from '../../features/lists/listSlice'
-import { getOHLC, getHistoricalData} from '../../features/iex/core/coreSlice'
+import { getOHLC, getHistoricalData} from '../../features/iex/core/latestPriceSlice'
 // import {CandlestickChart} from '../features/d3/chart/testCandlestick'
 
 import { CandlestickChart } from './chartView/views/Candlestick'

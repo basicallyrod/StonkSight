@@ -134,7 +134,7 @@ const TickerListForm = (listId) => {
         
         <>
         {/* const ref = {{...register('tickerName')}} */}
-            {/* <Form > */}
+            <Form.TextInput onSubmit = {handleSubmit(onSubmit)}>
                 {/* <Form.Wrapper> */}
                 {/* <Form.Wrapper onSubmit = {handleSubmit(onSubmit)}> */}
                     {/* <Form.Label>Add Ticker</Form.Label> */}
@@ -159,7 +159,7 @@ const TickerListForm = (listId) => {
                             ref(e)
                             tickerNameRef.current = e
                         }}
-                        onSubmit = {handleSubmit(onSubmit)}
+                        
                         // value = 
                         // type = 'text'
                         // name="tickerName"
@@ -192,7 +192,7 @@ const TickerListForm = (listId) => {
                     </Button> */}
 
                 {/* </Form.Wrapper> */}
-            {/* // </Form> */}
+            </Form.TextInput>
 
             {/* <h1>List goes here</h1> */}
             {/* <ListItem/> */}

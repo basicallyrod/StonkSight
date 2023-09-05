@@ -6,10 +6,11 @@ import styled from 'styled-components';
 
 const Container = styled.div`
     position: relative;
-    background: #242424;
-    height: 100%;
-    width: 100%;
-    perspective: 1500px;
+    background: #354157;
+    height: 100vh;
+    width: 100vw;
+    /* perspective: 1500px; */
+    /* margin: 5vh 5vw; */
     display: flex;
     flex-direction: row;
     
@@ -18,14 +19,136 @@ const Container = styled.div`
 
 const Wrapper = styled.div`
     /* background: #1A3947; */
-    background: #242424;
-    display: flex;
+    /* background: #242424; */
+    /* height: 200px; */
+    /* height: 100px; */
+    width: 15vw;
+    /* display: table;  */
+    padding: 2vh 2vw;
+    margin: 50px 50px;
     flex-direction: column;
-    justify-content: space-evenly;
-    align-content: center;
-    margin-left: 20% auto;
-    margin-right: 20% auto;
+    
+    /* border: solid; */
+    /* border-radius: 10px; */
+    /* border-width: .25vh .25vw; */
+    /* border-color: #AB9DF2; */
+
+    /* display: inline-block; */
+    /* flex-direction: column; */
+    /* border: 5em; */
+    /* border-color: red; */
+    /* justify-content: space-evenly; */
+    /* align-content: center; */
+    /* margin-left: 20% auto; */
+    /* margin-right: 20% auto; */
+    &::-webkit-scrollbar {
+        width: 10px;
+        background: red;
+    }
 `;
+
+const BalanceWrapper = styled.div`
+    /* background: #1A3947; */
+    background: #242424;
+    /* height: 200px; */
+    /* height: 100px; */
+    /* width: 10vw; */
+    height: 10vh;
+    /* display: table; */
+    padding: 2vh 2vw;
+    /* margin: 20vh 0px; */
+    margin-bottom: 10vh;
+    border: solid;
+    border-radius: 10px;
+    border-width: .25vh .25vw;
+    border-color: #AB9DF2;
+
+    /* display: inline-block; */
+    /* flex-direction: column; */
+    /* border: 5em; */
+    /* border-color: red; */
+    /* justify-content: space-evenly; */
+    /* align-content: center; */
+    /* margin-left: 20% auto; */
+    /* margin-right: 20% auto; */
+    &::-webkit-scrollbar {
+        width: 10px;
+        background: red;
+    }
+`;
+
+
+
+const Wrapper1 = styled.div`
+    background: #1A3947;
+    /* background: #242424; */
+    display: table;
+    padding: 2vh 2vw;
+    margin: 0 50px;
+    border: solid;
+    border-radius: 10px;
+    border-width: .25vh .25vw;
+    border-color: #AB9DF2;
+
+    width: 20vw;
+    &::-webkit-scrollbar {
+        width: 10px;
+        background: red;
+    }
+
+`;
+
+const ChartWrapper = styled.div`
+    background: #49464E;
+    /* background: #242424; */
+    height: 75vh;
+    /* height: 1400px; */
+    width: 55vw;
+    top: 50%;
+    left: 50%;
+    /* margin: 0 50px; */
+    border: solid;
+    /* border-radius: 10px; */
+    /* border-width: .25vh .25vw; */
+    /* padding */
+    padding: 10% 10%;
+    border-color: #AB9DF2;
+    display: inline-block;
+    flex-direction: column;
+    /* border: 5em; */
+    /* border-color: red; */
+    /* justify-content: space-evenly; */
+    /* align-content: center; */
+    /* margin-left: 20% auto; */
+    /* margin-right: 20% auto; */
+    &::-webkit-scrollbar {
+        width: 10px;
+        background: red;
+    }
+`;
+
+
+const ChartControllerWrapper = styled.div`
+    margin: 2vh;
+    /* height:10vh; */
+    width: 55vw;
+    background: #49464E;
+`
+
+const NewsfeedWrapper = styled.div`
+    margin: 0 50px;
+    padding: 2vh 2vw;
+    border: solid;
+    border-radius: 10px;
+    border-width: .25vh .25vw;
+    border-color: #AB9DF2;
+
+    width: 25vw;
+    height: relative;
+    background: #37343A;
+`
+
+// const Scrollbar = styled.div``
 
 const Background = styled.div`
     min-height: 1000px;
@@ -326,6 +449,11 @@ const Form = styled.form`
 export {
     Container,
     Wrapper,
+    BalanceWrapper,
+    Wrapper1,
+    ChartWrapper,
+    ChartControllerWrapper,
+    NewsfeedWrapper,
     Background,
     BackgroundContent,
     Picture,

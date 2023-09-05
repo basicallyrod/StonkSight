@@ -67,18 +67,20 @@ function RegisterContainer() {
 
         dispatch(reset())
     }, [user, isError, isSuccess, message, navigate, dispatch])
+
     const onChange = (err) => {
         setFormData((prevState) => ({
             ...prevState,
             [err.target.name]: err.target.value,
         }))
-        console.log('success')
+        console.log('field change success')
 
     };
 
     const onSubmit = (err) => {
+        console.log('onSubmit part')
         err.preventDefault()
-        console.log('success')
+        console.log('register success')
 
         if(password !== password1) {
             toast.error('Passwords do not match')
@@ -105,7 +107,7 @@ function RegisterContainer() {
                     <Home.Text>Please create an account</Home.Text>
                     
 
-                    <Form onSubmit = {onSubmit}>
+                    <Form.TextInput onSubmit = {onSubmit}>
                         <Form.Wrapper>
                             <Form.Label>Username</Form.Label>
                             <Form.StyledInput
@@ -151,7 +153,7 @@ function RegisterContainer() {
                             </Button>
                         </Form.Wrapper>
 
-                    </Form>
+                    </Form.TextInput>
 
 
                 </Home.Wrapper>

@@ -1,4 +1,4 @@
-import { Container, Wrapper, StyledButton } from "./styles/buttons"
+import { Container, Wrapper, StyledButton, Toggle, ToggleRow} from "./styles/buttons"
 
 
 
@@ -12,6 +12,14 @@ Button.Wrapper = ({children, ...restProp}) => {
 
 Button.StyledButton = ({children, ...restProp}) => {
     return<StyledButton {...restProp} >{children} </StyledButton>
+}
+
+Button.Toggle = ({children, ...restProp}) => {
+    return<Toggle {...restProp}> {children} </Toggle>
+}
+
+Button.ToggleRow = ({children, ...restProp}) => {
+    return<ToggleRow {...restProp}> {children} </ToggleRow>
 }
 
 export {

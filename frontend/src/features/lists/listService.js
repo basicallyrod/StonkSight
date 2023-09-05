@@ -4,7 +4,8 @@ const API_URL = '/api/lists/'
 
 
 //Create new list
-const createList = async (listData, token) => {
+const createList = async (listData, token, uid) => {
+    console.log(`uid: ${uid}`)
 
     const config = {
         headers: {
@@ -13,8 +14,9 @@ const createList = async (listData, token) => {
     }
 
 
-    console.log(`listService createLists: ${token}  | ${listData}`)
-    const response = await axios.post(API_URL, listData, config)
+    console.log(`listService createLists: ${token}  | ${listData} | ${uid}`)
+    console.log(API_URL + 'user/' + uid + '/list')
+    const response = await axios.post(API_URL + uid, listData, config)
     return response.data
 
 
@@ -29,13 +31,17 @@ const getLists = async (token) => {
     const response = await axios.get(API_URL, config)
     return response.data
 }
-const deleteList = async (listId, token) => {
+const deleteList = async (listId, token, uid) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     }
-    const response = await axios.delete(API_URL + listId, config)
+    // const data = {
+    //     "listId": listId
+    // }
+    // console.log(data)
+    const response = await axios.delete(API_URL + uid + '/' + listId, config)
     
     return response.data
 }
@@ -58,12 +64,11 @@ const addTicker = async (listData, token) => {
             Authorization: `Bearer ${token}`,
         },
     }
-
+    console.log(listData)
     console.log(`listService addTicker: ${token}  | ${listData.listId} | ${listData.tickerName}`)
     const response = await axios.put(
         API_URL + '/' + listData.listId + '/', 
         {
-            listId: listData.listId,
             tickerName: listData.tickerName
         }, 
         config

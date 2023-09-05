@@ -29,8 +29,12 @@ if(process.env.NODE_ENV === 'production') {
         path.resolve(__dirname, '../', 'frontend', 'build', 'index.html')
     ))
 } else {
-    app.get('/', (req, res) => res.send('Please set to production'))
+    app.get('/', (req, res) => res.send('Please set to production: ' + {data: { body: req.body}}))
 }
+    // app.get('/'), (req, res) => {
+    //     res.status(200).json({data: { body: req.body}})
+    // }
+
 
 const description = 'Server started on port ';
 // const properties = port;

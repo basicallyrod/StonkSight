@@ -4,8 +4,9 @@ const { getLists, setList, updateList, deleteList, addTicker, deleteTicker} = re
 
 const {protect} = require('../middleware/authMiddleware');
 
-router.route('/').get(protect, getLists).post(protect, setList)
-router.route('/:id').put(protect, addTicker).delete(protect, deleteList)
-router.route('/:id/:listId').put(protect, addTicker).delete(protect, deleteTicker)
+router.route('/').get(protect, getLists)
+router.route('/:user').post(protect, setList)
+router.route('/:user/:listId/').delete(protect, deleteList)
+router.route('/:listId').put(protect, addTicker).delete(protect, deleteTicker)
 
 module.exports = router;

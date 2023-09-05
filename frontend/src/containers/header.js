@@ -22,16 +22,20 @@ import {logout, reset} from '../features/auth/authSlice'
 
     return (
         <Header>
-            <Header.Wrapper>
+            {/* <Header.Wrapper>
                 <Header.Row>
                     <Header.Title>
                         StonkSight
                         
                     </Header.Title>
                 </Header.Row>
-            </Header.Wrapper>
+            </Header.Wrapper> */}
             <Header.Wrapper>
                 <Header.Row>
+                        <Header.Title>
+                            StonkSight
+                            
+                        </Header.Title>
                         <Navbar.Wrapper>
 
                             <Navbar.Row>

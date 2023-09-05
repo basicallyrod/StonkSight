@@ -3,8 +3,10 @@ import {StyledModal} from "./styles/modal"
 
 
 const Modal = ({ children, ...restProps }) => {
-    return < Container {...restProps}> {children}</Container>;
+    return < StyledModal {...restProps}> {children}</StyledModal>;
 };
+
+
 
 
 

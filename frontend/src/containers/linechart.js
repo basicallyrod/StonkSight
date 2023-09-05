@@ -7,11 +7,11 @@ import * as d3 from "d3"
 import { useForm } from 'react-hook-form';
 // import {useSelector} from 'react-redux'
 // import {useSelector} from 'react-redux'
-import {ListForm} from '../components/commonElements/list/ListForm'
-import {ListItem} from '../components/commonElements/list/ListItem'
+// import {ListForm} from '../components/commonElements/list/ListForm'
+// import {ListItem} from '../components/commonElements/list/ListItem'
 import {Spinner} from '../components/commonElements/spinner/spinner.jsx'
 import {createList, getLists, deleteList, reset} from '../features/lists/listSlice'
-import { getOHLC, getHistoricalData} from '../features/iex/core/coreSlice'
+import { getOHLC, getHistoricalData} from '../features/iex/core/latestPriceSlice'
 import {CandlestickChart} from '../features/d3/chart/testCandlestick'
 
 import Home from "../components/pages/home/index.js"

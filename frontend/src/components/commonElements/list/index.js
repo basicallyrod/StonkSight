@@ -29,6 +29,14 @@ Form.Wrapper = ({children, ...restProps}) => {
     return <StyledForm.Wrapper {...restProps}>{children}</StyledForm.Wrapper>;
 };
 
+Form.Wrapper1 = ({children, ...restProps}) => {
+    return <StyledForm.Wrapper1 {...restProps}>{children}</StyledForm.Wrapper1>;
+};
+
+Form.TextInput = ({children, ...restProps}) => {
+    return <StyledForm.TextInput {...restProps}>{children}</StyledForm.TextInput>;
+};
+
 Form.Label = ({children, ...restProps}) => {
     return <StyledForm.Label {...restProps}>{children}</StyledForm.Label>;
 };
@@ -52,6 +60,29 @@ Form.StyledInputWRef = forwardRef(({children, ...restProps}, ref) => {
         </StyledForm.StyledInput>
     );
 });
+
+Form.StyledTable = ({children, ...restProps}) => {
+    return <StyledForm.StyledTable {...restProps}>{children}</StyledForm.StyledTable>;
+};
+Form.StyledTBody1= ({children, ...restProps}) => {
+    return <StyledForm.StyledTBody1{...restProps}>{children}</StyledForm.StyledTBody1>;
+};
+
+Form.StyledTHead = ({children, ...restProps}) => {
+    return <StyledForm.StyledTHead {...restProps}>{children}</StyledForm.StyledTHead>;
+};
+
+Form.StyledTR = ({children, ...restProps}) => {
+    return <StyledForm.StyledTR {...restProps}>{children}</StyledForm.StyledTR>;
+};
+
+Form.StyledTD = ({children, ...restProps}) => {
+    return <StyledForm.StyledTD {...restProps}>{children}</StyledForm.StyledTD>;
+};
+
+Form.StyledTBody = ({children, ...restProps}) => {
+    return <StyledForm.StyledTBody {...restProps}>{children}</StyledForm.StyledTBody>;
+};
 
 Form.FormRow = ({children, ...restProps}) => {
     return <StyledForm.FormRow {...restProps}>{children}</StyledForm.FormRow>;

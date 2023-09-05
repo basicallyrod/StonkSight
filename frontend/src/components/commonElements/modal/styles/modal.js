@@ -58,3 +58,7 @@ const StyledModal = Modal.styled`
 //     width:100vw;
 //     background: rgba(0,0,0,0.5);
 // `;
+
+export{
+  StyledModal
+}
