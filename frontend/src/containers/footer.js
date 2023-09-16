@@ -10,16 +10,9 @@ function FooterContainer() {
             <Footer.Wrapper className = "Footer Wrapper">
                 <Footer.Row className = "Footer Row">
                     <Footer.Column className = "Footer Column">
-                        <Footer.Title className = "Footer Title About Me">About Me</Footer.Title>
-                            <Footer.Link href="#">Story</Footer.Link>
-                            <Footer.Link href="#">Skills</Footer.Link>
-                            <Footer.Link href="#">Hobbies</Footer.Link>
-                            <Footer.Link href="#">Resume</Footer.Link>
-                    </Footer.Column>
-                    <Footer.Column className = "Footer Column">
                         <Footer.Title className = "Footer Title Contact Me">Contact Me</Footer.Title>
                             <Footer.Link href ="https://www.linkedin.com/in/roderickbuo/" target= "_blank">
-                                <Icon className = "LinkedinIn" />
+                                <Icon className = "LinkedIn" />
                                 {/* <LinkedinIn size="18"/> */}
                                 LinkedIn
                             </Footer.Link>

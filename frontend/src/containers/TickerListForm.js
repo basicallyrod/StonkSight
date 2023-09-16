@@ -85,10 +85,11 @@ const TickerListForm = (listId) => {
         //     toast.error('Please enter a name for the list')
 
         console.log(`ListForm onSubmit: ${listId.listId}`)
+        console.log(`${listId.listId.listName}`)
         let tickerName = data.tickerName
-        let listIdData = listId.listId
+        let listName = listId.listId.listName
         const listData = {
-            listId: listIdData,
+            listName,
             tickerName
         }
         console.log(listData)

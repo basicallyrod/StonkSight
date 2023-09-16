@@ -154,35 +154,43 @@ const addTicker = asyncHandler (async (req, res) => {
     console.log("addTicker")
     console.log(req.params)
     console.log(req.body)
+    // console.log(req.body.listName)
+    // const lists = await List.find({user: req.user.id, listName: req.params.listName})
     // const list = await List.find({_id: req.params.listId})
     // console.log(list)
 
     const tickerName = req.body.tickerName;
     console.log(tickerName)
 
-    const updateTickerList = () => {
-        List.findByIdAndUpdate(
-            req.params.listId,
-            {
-                $addToSet:{
-                    tickerList: tickerName
-                }
-            },
-            { new: true},
-            (err, result) => {
-                if (err) {
-                    console.error("Cannot update list", err);
-                    res.status(500).end();
-                } 
-                else {
-                    res.status(200).json(result)
-                    // console.log(result)
-                }
+    const list = List.findOneAndUpdate(
+        {user: req.user.id, listName: req.params.listName},
+        {
+            $addToSet:{
+                tickerList: tickerName
             }
-        )
-    }
+        },
+        { new: true},
+        // (err, result) => {
+        //     if (err) {
+        //         console.error("Cannot update list", err);
+        //         res.status(500).end();
+        //     } 
+        //     else {
+        //         res.status(200).json(result)
+        //         // return result
+        //         console.log(result)
+        //     }
+        //     // console.log(result)
+        // }
+    )
+    // const updatedList =  List.findOne({user: req.user.id, listName: req.params.listName})
 
-    updateTickerList()
+
+    // console.log(list)
+    // console.log('new List Data')
+    
+
+    return list
         
     
     // res.status(200).json(updateTickerList)

@@ -81,7 +81,7 @@ export const addTicker = createAsyncThunk('lists/addTicker',
         try{
 
             const token = thunkAPI.getState().auth.user.token
-            console.log(`listSlice addTicker: ${listData.listId} | ${listData.tickerName} | ${token}`)
+            console.log(`listSlice addTicker: ${listData.listName} | ${listData.tickerName} | ${token}`)
             return await listService.addTicker(listData, token)
         } catch (error) {
             const message = (error.response && error.response.data && error.response.data.message)
@@ -120,12 +120,12 @@ export const listSlice = createSlice({
         .addCase(createList.fulfilled, (state, action) => {
             state.isLoading = false
             state.isSuccess = true
-            state.lists.push(action.payload)
+            state.lists[0].push(action.payload)
         })
         .addCase(createList.rejected, (state, action) => {
             state.isLoading = false
             state.isSuccess = true
-            state.lists.push(action.payload)
+            // state.lists.push(action.payload)
         })
 
         
@@ -180,12 +180,13 @@ export const listSlice = createSlice({
         .addCase(addTicker.fulfilled, (state, action) => {
             state.isLoading = false
             state.isSuccess = true
-            state.lists = state.lists.filter((list) => list._id !== action.payload.id)
+            // console.log(action)
+            // state.lists.filter((list) => list.listName === action.meta.arg.listName).
         })
         .addCase(addTicker.rejected, (state, action) => {
             state.isLoading = false
             state.isSuccess = true
-            state.lists.push(action.payload)
+            // state.lists.push(action.payload)
         })
 
 

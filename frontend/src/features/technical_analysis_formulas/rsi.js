@@ -4,7 +4,7 @@ import helpers from './iex_helpers/prevDataGetter.js'
 
 const prices1 = [283.46, 280.69, 285.48, 294.08, 293.90, 299.92, 301.15, 284.45, 294.09, 302.77, 301.97, 306.85, 305.05, 301.06, 291.97, 284.18, 286.48, 284.54, 276.82, 284.49, 275.01, 279.07, 277.85, 278.85, 283.76, 291.72, 284.73, 291.82, 296.74, 291.13]
 
-const rsi = async(data) => {
+const rsi = (data) => {
     console.log(data)
 
     let rsi_value_arr = []

@@ -65,15 +65,23 @@ const addTicker = async (listData, token) => {
         },
     }
     console.log(listData)
-    console.log(`listService addTicker: ${token}  | ${listData.listId} | ${listData.tickerName}`)
-    const response = await axios.put(
-        API_URL + '/' + listData.listId + '/', 
+    console.log(`listService addTicker: ${token}  | ${listData.listName} | ${listData.tickerName}`)
+    const response = () =>{ 
+        return axios.put(
+        API_URL + listData.listName + '/' + listData.tickerName, 
         {
             tickerName: listData.tickerName
         }, 
         config
-    )
-    return response.data
+        )
+    }
+    response()
+    const updatedList = await axios.get(API_URL, config)
+
+    
+
+    console.log(updatedList.data)
+    return updatedList.data
     
 }
 

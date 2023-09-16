@@ -158,121 +158,6 @@ function CandlestickChartContainer({list}) {
     //         activeTARefs.push(e)
     //     }
     // }
-        //need to add a chartObjectHelper
-    // let previous_dates_array = [];
-    //return
-    const previousDatesHelper = (dates) => {
-        console.log(dates)
-        console.log(previousDates)
-        
-        let previous_dates_array = [];
-        dates.map(day => {
-            console.log(day)
-            console.log(previous_dates_array)
-            
-
-            if(previousDates && previousDates.includes(day)) {
-                //do nothing
-                console.log(`${day} is in the array already`)
-            }
-            else{
-                previous_dates_array.push(day)
-
-            }
-            
-            
-
-            // return previous_dates_array;
-            // console.log(day)
-        })
-
-        //returns a blank array to not fetch any data
-        if(previous_dates_array.length === 0){
-            console.log(previous_dates_array)
-            console.log(previousDates)
-            return previous_dates_array;
-        }
-
-        //return the dates that are not  in the previousDates state
-        //also changes the state to include the new dates that aren't in the previousDates state
-        if(previous_dates_array.length > 0){
-            // setPreviousDates([
-            //     previous_dates_array,
-            //     ...previousDates
-            // ])
-            let temp = previous_dates_array.concat(previousDates)
-            let datesToFetch = temp.filter(x => !previousDates.includes(x))
-            console.log(datesToFetch)
-            setPreviousDates(temp)
-            console.log(temp)
-
-            return datesToFetch;
-
-            
-        }
-
-        //previous_dates_array is the new dates to be added
-        // return previous_dates_array
-
-        
-        
-    }
-
-    const previous_dates = async(date, range) => {
-        console.log(date)
-        console.log(markedDate)
-        let index = historicalPrice.findIndex((element) => {
-            // element
-            let found = element.find((data) => {
-                return data.symbol === list
-            })
-            console.log(found)
-            return found
-        })
-
-
-        let temp_previous_dates_array = helpers.prevMarketData(historicalPrice[index].symbol, range, date)
-        // temp_previous_dates_array.includes((day) => {
-        //     console.log(day)
-        //     if(previous_dates_array.some(day)){
-        //         //the day is in the array so don't add
-        //         console.log(`${day} is already in the array`)
-        //     }
-        //     else{
-        //         previous_dates_array.push(day)
-        //     }
-        // })
-        console.log(temp_previous_dates_array)
-        let isInArray = (element, element1) => {
-            if(element === element1) return true;
-            else return false;
-        }
-        //checks the prevMarketData to see if there are duplicates from previous technical analyses
-        // let prevDates = previousDatesHelper(temp_previous_dates_array)
-
-        //if there are new previous dates, update the previousDates state
-        // if(prevDates.length > 0){
-
-        // }
-        // console.log(prevDates)
-        // console.log(temp_previous_dates_array)
-        // temp_previous_dates_array.map(day => {
-        //     if(previous_dates_array.includes(day)) {
-        //         //do nothing
-        //         console.log(`${day} is in the array already`)
-        //     }
-        //     else{
-        //         previous_dates_array.push(day)
-        //         // setPreviousDates([
-        //         //     day,
-        //         //     ...previousDates
-        //         // ])
-        //     }
-        //     // console.log(day)
-        // })
-        // console.log(previous_dates_array)
-        return temp_previous_dates_array;
-    }
 
 
     //takes in the current stateHistoricalPrice and the earliestDate provided from the user to see if the state has that date
@@ -306,11 +191,10 @@ function CandlestickChartContainer({list}) {
 
         const historicalData = await dispatch(getHistoricalData({ticker, range})).then(res => {
             console.log(res)
-            // setStateHistoricalPrice([
-            //     res.payload,
-            //     ...stateHistoricalPrice
-            // ])
-            setStateHistoricalPrice(res.payload)
+            setStateHistoricalPrice([
+                res.payload,
+                ...stateHistoricalPrice
+            ])
             return res.payload
         })
 
@@ -326,12 +210,69 @@ function CandlestickChartContainer({list}) {
         console.log(markedDate)
         console.log(firstDay)
         console.log(lastDay)
-        console.log(index)
 
         const historicalData = await dispatch(getSpecificHistoricalDataRange({ticker, firstDay, lastDay, index}))
         
         .then(res => {
             console.log(res.payload)
+            // let data = res.payload.reverse();
+            // setStateHistoricalPrice([
+            //     res.payload,
+            //     ...stateHistoricalPrice
+            // ])
+            // res.payload.map(data => {
+            //     setStateHistoricalPrice([
+            //         data,
+            //         ...stateHistoricalPrice[index]
+            //     ])
+            // })
+            // let data = res.payload.reverse().map((data, key) => {
+            //     console.log(data)
+            //     console.log(data.priceDate)
+            //     setStateHistoricalPrice([
+            //         data,
+            //         ...stateHistoricalPrice
+            //     ])
+                
+            // })
+            //passed the current object(price, date, etc)
+            //loop through the historicalPrice array to see if it is in there
+            // let dayIsInState = (day) => {
+            //     console.log(day.priceDate)
+            //     historicalPrice[0].some(object => {
+            //         console.log(object.priceDate)
+
+            //         if(object.priceDate === day.priceDate){
+            //             console.log("true")
+            //             return true;
+            //         }
+            //         else {
+            //             console.log("false")
+            //             setStateHistoricalPrice([
+            //                 day,
+            //                 ...stateHistoricalPrice
+            //             ])
+            //             return false;
+            //         }
+
+            //     })
+            // }
+            // res.payload.map((day, key) => {
+            //     console.log(day)
+            //     // if(historicalPrice[0].includes(day)){
+            //         // historicalPrice[0].some(dayIsInState(day))
+
+            //         dayIsInState(day)
+            //         // console.log(historicalPrice[0].includes(day))
+            //     // }
+            //     // setStateHistoricalPrice([
+            //     //     day,
+            //     //     ...stateHistoricalPrice
+            //     // ])
+
+            // })
+            console.log(res.payload)
+            
             return res.payload
         })
         console.log(historicalData)
@@ -370,107 +311,41 @@ function CandlestickChartContainer({list}) {
 
     //first check if the range is a fixedRange(1d, 1w, 1m, 1y, etc) or custom(user inputted dates)
     //generate data based on the user's selection
-    const listData1 = useCallback((rangeSelector, list) => {
+    const listData1 = async (rangeSelector) => {
         console.log(list)
         console.log(rangeSelector.currentSelector)        
         //call the normal(change to fixed later) getHistoricalData
-        let index = historicalPrice.findIndex((element) => {
-            // element
-            let found = element.find((data) => {
-                return data.symbol === list
-            })
-            console.log(found)
-            return found
-        })
-
         if(rangeSelector.currentSelector === 'fixedRange'){
-            // console.log(rangeSelector)
-            // const data = list.map((ticker) => {
-            //     console.log(ticker)
-                
-
-                return tickerHistoricalData(list, rangeSelector.fixedRange)
-                .then(res => {
-                    console.log(res)
-                    console.log(markedDate)
-                    console.log(longestPeriod)
-
-                    return previous_dates(markedDate, longestPeriod)
-                    .then(res => {
-    
-                        //initiate the object to be pushed into the data
-                        // let specificObject = {
-                        //     ticker: list[0],
-                        //     firstDay: res[0],
-                        //     lastDay: res[res.length - 1],
-                        //     index: 0
-                        // }
-                        console.log(res)
-                        console.log(res[0])
-                        console.log(res[res.length - 1])
-                        // console.log(list[0])
-                        let dates = previousDatesHelper(res)
-                        // .then(dates => {
-                        //     console.log(dates)
-                        //     tickerHistoricalDataRange(list[0], dates[0], dates[dates.length - 1], 0)
-                        // })
-                        // .then(newPreviousDates => {
-                        //     console.log(newPreviousDates)
-                        //     setPreviousDates([
-                        //         newPreviousDates,
-                        //         ...previousDates
-                        //     ])
-                        // })
-                        console.log(dates)
-    
-                        if(dates.length === 0){
-                            return previousDates
-                        }
-                        else{
-                            return previousDates
-                        }
-                    // if(longestPeriod > 0){
-                    //     tickerHistoricalDataRange(list, res1[0], res1[res1.length - 1], index)
-                    // }
-                    })
-
-                })
-                .then(res1 => {
-                    console.log(res1)
-                    tickerHistoricalDataRange(list, res1[0], res1[res1.length - 1], index)
-
-                })
-                .then(res => {
+            console.log(rangeSelector)
+            const data = list.map((ticker) => {
+                console.log(ticker)
+                return tickerHistoricalData(ticker.quote, rangeSelector.fixedRange).then(res => {
                     console.log(res)
                     setCurrentDateCounter(res[0].date)
                 })
     
-            // })
-            // console.log(data)
-            // return data
+            })
+            console.log(data)
+            return data
 
-                
         }
-        
 
         //call getSpecificHistoricalDataRange
         else if(rangeSelector.currentSelector === 'customRange'){
-            
-            // console.log(rangeSelector)
-            // const data = list.map((ticker) => {
-            //     console.log(ticker)
-                return tickerHistoricalDataRange(list, rangeSelector.firstDay, rangeSelector.lastDay)
-                .then(res => {
+            console.log(rangeSelector)
+            const data = list.map((ticker) => {
+                console.log(ticker)
+                return tickerHistoricalDataRange(ticker.quote, rangeSelector.firstDay, rangeSelector.lastDay).then(res => {
                     console.log(res)
                     setCurrentDateCounter(res[0].date)
                 })
-            // })
-            // console.log(data)
-            // return data
+            })
+            console.log(data)
+            return data
             // const data = dispatch(getSpecificHistoricalDataRange(selector.firstDay, selector.lastDay))
 
         }
-    }, [activeTACharts, longestPeriod])
+    }
     
 
     //To have both the two symbol scale properly on one chart, we must create a Y axis for both symbols.
@@ -820,9 +695,7 @@ function CandlestickChartContainer({list}) {
     }
 
     const CandlestickChart = async(chartObject, taCharts) => {
-        
         console.log(taCharts)
-        console.log(activeTACharts)
         console.log(historicalPrice)
         console.log(macdValues)
         console.log(rsiValues)
@@ -840,12 +713,12 @@ function CandlestickChartContainer({list}) {
         console.log(chartObject.chartDate[0])
         
         // console.log(symbol)
-        const symbol = list
+        const symbol = list[0]
         console.log(symbol)
         //sets up the image h, w, and margins
         const containerSize = document.querySelector(".ChartContainer").getBoundingClientRect()
         const width = containerSize.width * .95;
-        const height = containerSize.height * (.95 - (.15 * taCharts));
+        const height = containerSize.height * (.95 - (.15 * activeTACharts.length));
         const marginTop = 50;
         const marginRight = 50;
         const marginBottom = 50;
@@ -984,9 +857,9 @@ function CandlestickChartContainer({list}) {
         // svg.append("g")
             
             .attr("width", width)
-            .attr("height", (containerSize.height * .95))
+            .attr("height", containerSize.height * .95)
             .attr("viewBox", [0, 0, width, (containerSize.height * .95)])
-            .attr("class", "svg-chart")
+            .attr("class", "svg chart")
             // .attr("viewBox", [0, 0, width, height])
             // .attr("fill", "cream")
             // .attr("fill_opacity", "0")
@@ -994,15 +867,11 @@ function CandlestickChartContainer({list}) {
             // .style('position', 'relative')
             // .join('path')
         const svgGroup = svg.append("g")
-            .attr("class", "svg main chart")
-
-        // const svgGroup = d3.select("svg-chart")
-            
 
         svgGroup.append("rect")
         .attr("width", width)
         .attr("height", height)
-        // .attr("class", "svg main chart")
+        .attr("class", "svg main chart")
         
         // .attr("width", "100%")
         // .attr("height", "100%")
@@ -1188,8 +1057,8 @@ function CandlestickChartContainer({list}) {
         // console.log(rsiHelper1(chartObject, 0))
         // let rsi = rsiHelper1(chartObject, 0);
         console.log(rsiValues)
-        // console.log(rsiValues.rsi_value_arr)
-        // console.log(macdValues.macd_value_arr)
+        console.log(rsiValues.rsi_value_arr)
+        console.log(macdValues.macd_value_arr)
         
         //X Axis Line interface()
         g.append("line")
@@ -1260,87 +1129,12 @@ function CandlestickChartContainer({list}) {
     //14 day rsi is the selectedPeriod
     // 29 - 14 = 15 days | longestPeriod - selectedPeriod
     //historicalPrice.slice(15 days)
-    const chartObjectHelper2 = async(longestPeriod, selectedPeriod, index) => {
+    const chartObjectHelper2 = async(longestPeriod, selectedPeriod) => {
         console.log(longestPeriod)
         console.log(selectedPeriod)
-        console.log(historicalPrice)
-        // let index = historicalPrice.findIndex((element) => {
-        //     let found = element.find((data) => data.symbol === list)
-        //     console.log(found.symbol)
-        //     return found
-        // })
-        // // .then(res => {
-        // //     console.log(res)
-        // // })
-        console.log(index)
-
         let startPeriod = longestPeriod - selectedPeriod
-        console.log(historicalPrice[index])
-        let chartData = historicalPrice[index].slice(startPeriod)
-        console.log(chartData)
-
-
-
-        // console.log(chartData.slice(0,13))
-        // console.log(chartData.slice(14, chartData.length))
-
-
-        // core.historicalPrice.map(index => {
-        // let chartDate = [chartData.map(day => {
-        //     let temp_date = new Date(day.date).toISOString()
-        //     return temp_date
-        // })]
-        let chartDate = [chartData.map(day => {
-            // console.log(day)
-            // console.log(day.close)
-            // console.log(day.priceDate)
-            
-            let localizedDate = day.priceDate + ' PDT'
-            // console.log(`${localizedDate} || ${d3.utcFormat(new Date(localizedDate))}`)
-            // console.log()
-            let formattedDate = d3.utcFormat("%m-%d-%y")
-            // console.log(formattedDate(new Date(localizedDate)))
-            return formattedDate(new Date(localizedDate))
-            // return new Date(day.date)
-        })]
-        // console.log(chartDate)
-        let chartOpen = [chartData.map(day => {return day.open})]
-        // console.log(chartOpen)
-        let chartClose = [chartData.map(day => {return day.close})]
-        // console.log(chartClose)
-        let chartHigh = [chartData.map(day => {return day.low})]
-        // console.log(chartHigh)
-        let chartLow = [chartData.map(day => {return day.high})]
-        // console.log(chartLow)
-        let chartSymbol = [chartData.map(day => {return day.symbol})]
-        // console.log(chartLow)
-        let chartObject = {
-            chartDate,
-            chartOpen,
-            chartClose,
-            chartHigh,
-            chartLow,
-            chartSymbol
-        }
-        // console.log(chartObject)
-        // console.log(chartObjectData)
-
-        // chartObjectData.push({chartObject})
-        return chartObject
-
-
-    }
-
-
-
-    //allows use to pass a different data to it, which allows us to create a different chart based on the data
-    const chartObjectHelper1 = async(data) => {
-        //generate the tickerList's historical data for each ticker using listData and historicalTickerPrice.
-        
-
-        // let taData = historicalData.splice(0,13)
-        // let chartData = historicalData.slice(13, historicalData.length)
-        let chartData = data
+        console.log(historicalPrice[0])
+        let chartData = historicalPrice[0].slice(startPeriod)
         console.log(chartData)
 
 
@@ -1360,22 +1154,86 @@ function CandlestickChartContainer({list}) {
             console.log(day.priceDate)
             
             let localizedDate = day.priceDate + ' PDT'
-            // console.log(`${localizedDate} || ${d3.utcFormat(new Date(localizedDate))}`)
+            console.log(`${localizedDate} || ${d3.utcFormat(new Date(localizedDate))}`)
             // console.log()
             let formattedDate = d3.utcFormat("%m-%d-%y")
-            // console.log(formattedDate(new Date(localizedDate)))
+            console.log(formattedDate(new Date(localizedDate)))
             return formattedDate(new Date(localizedDate))
             // return new Date(day.date)
         })]
-        // console.log(chartDate)
+        console.log(chartDate)
         let chartOpen = [chartData.map(day => {return day.open})]
-        // console.log(chartOpen)
+        console.log(chartOpen)
         let chartClose = [chartData.map(day => {return day.close})]
-        // console.log(chartClose)
+        console.log(chartClose)
         let chartHigh = [chartData.map(day => {return day.low})]
-        // console.log(chartHigh)
+        console.log(chartHigh)
         let chartLow = [chartData.map(day => {return day.high})]
+        console.log(chartLow)
+        let chartSymbol = [chartData.map(day => {return day.symbol})]
         // console.log(chartLow)
+        let chartObject = {
+            chartDate,
+            chartOpen,
+            chartClose,
+            chartHigh,
+            chartLow,
+            chartSymbol
+        }
+        console.log(chartObject)
+        // console.log(chartObjectData)
+
+        // chartObjectData.push({chartObject})
+        return chartObject
+
+
+    }
+
+
+
+    //allows use to pass a different data to it, which allows us to create a different chart based on the data
+    const chartObjectHelper1 = async(data) => {
+        //generate the tickerList's historical data for each ticker using listData and historicalTickerPrice.
+        
+
+        // let taData = historicalData.splice(0,13)
+        // let chartData = historicalData.slice(13, historicalData.length)
+        let chartData = data[0]
+        console.log(chartData)
+
+
+
+        // console.log(chartData.slice(0,13))
+        // console.log(chartData.slice(14, chartData.length))
+
+
+        // core.historicalPrice.map(index => {
+        // let chartDate = [chartData.map(day => {
+        //     let temp_date = new Date(day.date).toISOString()
+        //     return temp_date
+        // })]
+        let chartDate = [chartData.map(day => {
+            console.log(day)
+            console.log(day.close)
+            console.log(day.priceDate)
+            
+            let localizedDate = day.priceDate + ' PDT'
+            console.log(`${localizedDate} || ${d3.utcFormat(new Date(localizedDate))}`)
+            // console.log()
+            let formattedDate = d3.utcFormat("%m-%d-%y")
+            console.log(formattedDate(new Date(localizedDate)))
+            return formattedDate(new Date(localizedDate))
+            // return new Date(day.date)
+        })]
+        console.log(chartDate)
+        let chartOpen = [chartData.map(day => {return day.open})]
+        console.log(chartOpen)
+        let chartClose = [chartData.map(day => {return day.close})]
+        console.log(chartClose)
+        let chartHigh = [chartData.map(day => {return day.low})]
+        console.log(chartHigh)
+        let chartLow = [chartData.map(day => {return day.high})]
+        console.log(chartLow)
         let chartSymbol = [chartData.map(day => {return day.symbol})]
         // console.log(chartLow)
         let chartObject = {
@@ -1469,37 +1327,28 @@ function CandlestickChartContainer({list}) {
     }
 
     //helper functions calls the function that creates the charts
-    const svgHelper = useCallback((viewSelector, index, longestPeriod) => {
+    const svgHelper = async(viewSelector, index, longestPeriod) => {
         // chartObjectHelper(index)
-        // console.log('test')
-        // svgRef.current = null
-        
-        console.log(index)
-        console.log(markedDate)
         console.log(historicalPrice)
         console.log(activeTACharts.length)
         console.log(longestPeriod)
         if(historicalPrice.length > 0){
-            console.log('test')
-            let temp = chartObjectHelper2(longestPeriod, 0, index).then(res => {
-                console.log(res)
+            let temp = await chartObjectHelper2(longestPeriod, 0)
+            console.log(temp)
 
-                // let svgObject
+            // let svgObject
+            console.log(viewSelector)
+            if(viewSelector === "candlestick"){
                 console.log(viewSelector)
-                if(viewSelector === "candlestick"){
-                    console.log(viewSelector)
-                    return CandlestickChart(res, activeTACharts.length);
-                }
-                else if(viewSelector === "line"){
-                    console.log(viewSelector)
-                    return LineChart(res)
-                }
-                else{
-                    return CandlestickChart(res, activeTACharts.length)
-                }
-            })
-            return temp
-
+                return CandlestickChart(temp, activeTACharts.length);
+            }
+            else if(viewSelector === "line"){
+                console.log(viewSelector)
+                return LineChart(temp)
+            }
+            else{
+                return CandlestickChart(temp, activeTACharts.length)
+            }
         }
 
 
@@ -1507,7 +1356,7 @@ function CandlestickChartContainer({list}) {
 
         //Create a function to package together the chartObjects
 
-    }, [historicalPrice, svgRef, list, activeTACharts])
+    }
 
     //helper functions calls the function that creates the charts
     const svgTAHelper = (type, index) => {
@@ -1736,7 +1585,7 @@ function CandlestickChartContainer({list}) {
 
     }, [activeTARefs,svgTaRef, svgTARef1, svgTA1, taRef1, historicalPrice])
 
-    const svgHelperCallback = useCallback((view) => {
+    const svgHelperCallback = useCallback((view, index) => {
         // setChartDataState((chartData) => [...chartData, "newChartData"])
         // let chartObject = chartObjectHelper(index)
 
@@ -1747,38 +1596,10 @@ function CandlestickChartContainer({list}) {
 
         setViewSelector(view)
         console.log('svgHelper')
-        console.log(historicalPrice)
-        console.log(markedDate)
 
         //returns a svg.node
-        const chartSvg = async(viewSelector) => {
+        const chartSvg = async(viewSelector, index) => {
             console.log(viewSelector)
-
-            // if(!state.historicalPrice.find((element) => {
-            //     console.log(element[0].symbol)
-            //     let found = element.find((data) => data.symbol === action.meta.arg.ticker)
-            //     console.log(found)
-            //     return found;
-            // })){
-            //     if(undefined){
-            //         console.log('the element doesnt exists')
-            //     }
-            //     else{
-            //         console.log('the element exists')
-            //         state.historicalPrice.unshift(action.payload)
-            //     }
-                
-                
-            // }
-
-            let index = historicalPrice.find((element) => {
-                let found = element.find((data) => data.symbol === list)
-                console.log(found)
-            })
-            // .then(res => {
-            //     console.log(res)
-            // })
-            console.log(index)
             // let chartData = await chartObjectHelper(stateHistoricalPrice[index])
 
             // console.log(chartData)
@@ -1787,7 +1608,7 @@ function CandlestickChartContainer({list}) {
             if(stateHistoricalPrice){
                 console.log(stateHistoricalPrice[0])
                 // console.log(chartObjectHelper(stateHistoricalPrice[0]))
-                chartObjectHelper2(longestPeriod, 0, index).then((res) => {
+                chartObjectHelper2(longestPeriod, 0).then((res) => {
                     console.log(res)
                     console.log(viewSelector)
                     if(viewSelector === "candlestick"){
@@ -1814,18 +1635,18 @@ function CandlestickChartContainer({list}) {
         
         }
 
-        const currentSvg = async(view) => {
-            return chartSvg(view)
+        const currentSvg = async(view, index) => {
+            return chartSvg(view, index)
         }
         
-        // currentSvg(view)
+        // currentSvg(view, index)
 
         //generate the svg the svgRef.current with the selected view
 
-        return currentSvg(view)
+        return currentSvg(view, index)
 
 
-    }, [svgRef, historicalPrice, longestPeriod, svg, viewSelector, activeTACharts])
+    }, [svgRef, longestPeriod, svg, viewSelector, activeTACharts])
 
 
 
@@ -1868,7 +1689,7 @@ function CandlestickChartContainer({list}) {
         console.log(stateHistoricalPrice)
 
         // let taData = stateHistoricalPrice[index].splice(0,13)
-        let chartData = historicalPrice[index]
+        let chartData = stateHistoricalPrice[index]
 
         // console.log(taData)
         console.log(chartData)
@@ -1877,9 +1698,9 @@ function CandlestickChartContainer({list}) {
 
             // let chartData = await taHelper(stateHistoricalPrice.payload);  
 
-            taHelper(historicalPrice[index]).then((res) => {
+            taHelper(stateHistoricalPrice[index]).then((res) => {
                 
-                // rsiHelper1(res, 0)
+                rsiHelper1(res, 0)
                 // macdHelper(res)
                 // smaHelper(res)
                 // emaHelper(res)
@@ -1907,28 +1728,77 @@ function CandlestickChartContainer({list}) {
 
 
 
+    //need to add a chartObjectHelper
+    // let previous_dates_array = [];
+    //return
+    const previousDatesHelper = (dates) => {
+        console.log(dates)
+        console.log(previousDates)
+        
+        let previous_dates_array = [];
+        dates.map(day => {
+            console.log(day)
+            console.log(previous_dates_array)
+            
 
+            if(previousDates && previousDates.includes(day)) {
+                //do nothing
+                console.log(`${day} is in the array already`)
+            }
+            else{
+                previous_dates_array.push(day)
+
+            }
+            
+            
+
+            // return previous_dates_array;
+            // console.log(day)
+        })
+
+        //returns a blank array to not fetch any data
+        if(previous_dates_array.length === 0){
+            console.log(previous_dates_array)
+            console.log(previousDates)
+            return previous_dates_array;
+        }
+
+        //return the dates that are not  in the previousDates state
+        //also changes the state to include the new dates that aren't in the previousDates state
+        if(previous_dates_array.length > 0){
+            // setPreviousDates([
+            //     previous_dates_array,
+            //     ...previousDates
+            // ])
+            let temp = previous_dates_array.concat(previousDates)
+            let datesToFetch = temp.filter(x => !previousDates.includes(x))
+            console.log(datesToFetch)
+            setPreviousDates(temp)
+            console.log(temp)
+
+            return datesToFetch;
+
+            
+        }
+
+        //previous_dates_array is the new dates to be added
+        // return previous_dates_array
+
+        
+        
+    }
 
     //when the activeTARefs are updated, rerender the svg associated with it in the specified index
-    const taHelperCallback1 = useCallback((list, type) =>  {
+    const taHelperCallback1 = useCallback((index, type) =>  {
         console.log(historicalPrice[0])
-        let index = historicalPrice.findIndex((element) => {
-            // element
-            let found = element.find((data) => {
-                return data.symbol === list
-            })
-            console.log(found)
-            return found
-        })
-        console.log(index)
+
         // let previous_dates_array = [];
 
         const previous_dates = async(date, range) => {
             console.log(date)
-            console.log(markedDate)
 
 
-            let temp_previous_dates_array = helpers.prevMarketData(historicalPrice[index].symbol, range, date)
+            let temp_previous_dates_array = helpers.prevMarketData(historicalPrice[0].symbol, range, date)
             // temp_previous_dates_array.includes((day) => {
             //     console.log(day)
             //     if(previous_dates_array.some(day)){
@@ -1976,7 +1846,6 @@ function CandlestickChartContainer({list}) {
             console.log(e)
 
             
-            //first load
             if(e && !activeTACharts.includes(e)) {
                 
                 // activeTARefs.current.push(e)
@@ -1998,16 +1867,16 @@ function CandlestickChartContainer({list}) {
                 .then(res => {
 
                     //initiate the object to be pushed into the data
-                    // let specificObject = {
-                    //     ticker: list[0],
-                    //     firstDay: res[0],
-                    //     lastDay: res[res.length - 1],
-                    //     index: 0
-                    // }
+                    let specificObject = {
+                        ticker: list[0],
+                        firstDay: res[0],
+                        lastDay: res[res.length - 1],
+                        index: 0
+                    }
                     console.log(res)
                     console.log(res[0])
                     console.log(res[res.length - 1])
-                    // console.log(list[0])
+                    console.log(list[0])
                     let dates = previousDatesHelper(res)
                     // .then(dates => {
                     //     console.log(dates)
@@ -2110,66 +1979,54 @@ function CandlestickChartContainer({list}) {
                         // .then(chartData => {
                         // .then(chartData => {
                         console.log(e)
-                        console.log(historicalPrice[index].length)
+                        console.log(historicalPrice[0].length)
                         console.log(period)
                         
                         if(e === "RSI"){
                             console.log(longestPeriod)
                             
-                            return chartObjectHelper2(longestPeriod, period, index).then(chartData => {
+                            return chartObjectHelper2(longestPeriod, period).then(chartData => {
                                 console.log(chartData)
-                                // return rsiHelper1(chartData, index).then(rsi_values => {
-                                //     console.log(rsi_values)
-                                //     rsiChartHelper(rsi_values).then((svg) => {
-                                //         console.log(svg)
-                                //         activeTARefs.current.push(svg)
-                                //         console.log(activeTARefs)
-                                //         console.log(activeTARefs.current)
-                                //         setIsChartLoading(false)
-                                //         // setActiveTACharts([
-                                //         //     ...activeTACharts,
-                                //         //     'RSI'
-                                //         // ])
-                                //         // setActiveTACharts(['RSI'])
-                                //         console.log(activeTACharts)
-                                //         return svg
-                                //     })
-                                // })
-                                console.log(index)
-                                setActiveTACharts([
-                                    ...activeTACharts,
-                                    'RSI'
-                                ]);
-                                return rsiHelper1(chartData, index)
+                                return rsiHelper1(chartData, 0).then(rsi_values => {
+                                    console.log(rsi_values)
+                                    rsiChartHelper(rsi_values).then((svg) => {
+                                        console.log(svg)
+                                        activeTARefs.current.push(svg)
+                                        console.log(activeTARefs)
+                                        console.log(activeTARefs.current)
+                                        setIsChartLoading(false)
+                                        // setActiveTACharts([
+                                        //     ...activeTACharts,
+                                        //     'RSI'
+                                        // ])
+                                        // setActiveTACharts(['RSI'])
+                                        console.log(activeTACharts)
+                                        return svg
+                                    })
+                                })
                             })
 
                         }
                         if(e === "MACD"){
-                            return chartObjectHelper2(longestPeriod, period + 2, index).then(chartData => {
+                            return chartObjectHelper2(longestPeriod, period + 2).then(chartData => {
                                 console.log(chartData)
-                                // return macdHelper1(chartData, index).then(macd_values => {
-                                //     console.log(macd_values)
-                                //     macdChartHelper(macd_values).then((svg) => {
-                                //         console.log(svg)
-                                //         activeTARefs.current.push(svg)
-                                //         console.log(activeTARefs)
-                                //         console.log(activeTARefs.current)
-                                //         setIsChartLoading(false)
-                                //         // setActiveTACharts([
-                                //         //     ...activeTACharts,
-                                //         //     'MACD'
-                                //         // ])
-                                //         // setActiveTACharts(['macd'])
-                                //         console.log(activeTACharts)
-                                //         return svg
-                                //     })
-                                // })
-                                console.log(index)
-                                setActiveTACharts([
-                                    ...activeTACharts,
-                                    'MACD'
-                                ]);
-                                return macdHelper1(chartData, index)
+                                return macdHelper1(chartData, 0).then(macd_values => {
+                                    console.log(macd_values)
+                                    macdChartHelper(macd_values).then((svg) => {
+                                        console.log(svg)
+                                        activeTARefs.current.push(svg)
+                                        console.log(activeTARefs)
+                                        console.log(activeTARefs.current)
+                                        setIsChartLoading(false)
+                                        // setActiveTACharts([
+                                        //     ...activeTACharts,
+                                        //     'MACD'
+                                        // ])
+                                        // setActiveTACharts(['macd'])
+                                        console.log(activeTACharts)
+                                        return svg
+                                    })
+                                })
                             })
 
                         }
@@ -2205,15 +2062,14 @@ function CandlestickChartContainer({list}) {
                         console.log(res1)
                         // tickerHistoricalDataRange(list[0], res1[0], res1[res1.length - 1], 0)
                         console.log(previousDates)
-                        console.log(index)
 
                         // fetch the data neccessary for the chart
-                        return tickerHistoricalDataRange(list, res1[0], res1[res1.length - 1], index)
+                        return tickerHistoricalDataRange(list[0], res1[0], res1[res1.length - 1], 0)
                         .then(res => {
                             console.log(res)
                             console.log(historicalPrice)
                             let tempArr = [
-                                historicalPrice[index]
+                                historicalPrice[0]
                             ]
                             console.log(tempArr[0])
                             res.map((day) => {
@@ -2233,79 +2089,46 @@ function CandlestickChartContainer({list}) {
                                 console.log(e)
                                 console.log(chartData)
                                 if(e === "RSI"){
-                                    // return rsiHelper1(chartData, index).then(rsi_values => {
-                                    //     console.log(rsi_values)
-                                    //     return rsiChartHelper(rsi_values).then((svg) => {
-                                    //         console.log(svg)
-                                    //         activeTARefs.current.push(svg)
-                                    //         console.log(activeTARefs)
-                                    //         console.log(activeTARefs.current)
-                                    //         setIsChartLoading(false)
-                                    //         // setActiveTACharts([
-                                    //         //     ...activeTACharts,
-                                    //         //     'RSI'
-                                    //         // ])
-                                    //         // setActiveTACharts(['RSI'])
-                                    //         console.log(activeTACharts)
-                                    //         return svg
-                                    //     })
-                                    // })
-                                    setActiveTACharts([
-                                        ...activeTACharts,
-                                        'RSI'
-                                    ]);
-                                    console.log(index)
-                                    return rsiHelper1(chartData, index)
-
+                                    return rsiHelper1(chartData, 0).then(rsi_values => {
+                                        console.log(rsi_values)
+                                        rsiChartHelper(rsi_values).then((svg) => {
+                                            console.log(svg)
+                                            activeTARefs.current.push(svg)
+                                            console.log(activeTARefs)
+                                            console.log(activeTARefs.current)
+                                            setIsChartLoading(false)
+                                            // setActiveTACharts([
+                                            //     ...activeTACharts,
+                                            //     'RSI'
+                                            // ])
+                                            // setActiveTACharts(['RSI'])
+                                            console.log(activeTACharts)
+                                            return svg
+                                        })
+                                    })
                                 }
                                 if(e === "MACD"){
-                                    
-                                    // let macd_values = macdHelper1(chartData, index)
-                                    // let temp = macd_values
-                                    // console.log(temp)
-                                    // // temp.macd_date_arr = macd_values.macd_date_arr.slice(2)
-                                    // // temp.macd_value_arr = macd_values.macd_value_arr.slice(2)
-                                    // let svg = macdChartHelper(temp)
-                                    // activeTARefs.current.push(svg)
-                                    //         // console.log(activeTARefs)
-                                    //         // console.log(activeTARefs.current)
-                                    // setIsChartLoading(false)
-                                    //         // setActiveTACharts([
-                                    //         //     ...activeTACharts,
-                                    //         //     'MACD'
-                                    //         // ])
-                                    //         // setActiveTACharts(['macd'])
-                                    //         // console.log(activeTACharts)
-                                    // return svg
-                                    setActiveTACharts([
-                                        ...activeTACharts,
-                                        'MACD'
-                                    ]);
-                                    console.log(index)
-                                    return macdHelper1(chartData, index)
-                                        
+                                    return macdHelper1(chartData, 0).then(macd_values => {
+                                        console.log(macd_values)
+                                        let temp = macd_values
+                                        temp.macd_date_arr = macd_values.macd_date_arr.slice(2)
+                                        temp.macd_value_arr = macd_values.macd_value_arr.slice(2)
+                                        macdChartHelper(temp).then((svg) => {
+                                            console.log(svg)
+                                            activeTARefs.current.push(svg)
+                                            console.log(activeTARefs)
+                                            console.log(activeTARefs.current)
+                                            setIsChartLoading(false)
+                                            // setActiveTACharts([
+                                            //     ...activeTACharts,
+                                            //     'MACD'
+                                            // ])
+                                            // setActiveTACharts(['macd'])
+                                            console.log(activeTACharts)
+                                            return svg
+                                        })
+                                    })
                                 }
-                                    // return macdHelper1(chartData, index).then(macd_values => {
-                                    //     console.log(macd_values)
-                                    //     let temp = macd_values
-                                    //     temp.macd_date_arr = macd_values.macd_date_arr.slice(2)
-                                    //     temp.macd_value_arr = macd_values.macd_value_arr.slice(2)
-                                    //     return macdChartHelper(temp).then((svg) => {
-                                    //         console.log(svg)
-                                    //         activeTARefs.current.push(svg)
-                                    //         console.log(activeTARefs)
-                                    //         console.log(activeTARefs.current)
-                                    //         setIsChartLoading(false)
-                                    //         // setActiveTACharts([
-                                    //         //     ...activeTACharts,
-                                    //         //     'MACD'
-                                    //         // ])
-                                    //         // setActiveTACharts(['macd'])
-                                    //         console.log(activeTACharts)
-                                    //         return svg
-                                    //     })
-                                    // })
-                                })
                         })
 
                         // return taData;
@@ -2464,7 +2287,7 @@ function CandlestickChartContainer({list}) {
                     // })
                     // console.log(taData)
                     
-                // }
+                })
             }
             else if(e && activeTACharts.includes(e)) {
                 // activeTARefs.current.filter(e => !e)
@@ -2475,76 +2298,6 @@ function CandlestickChartContainer({list}) {
                 )
             }
             console.log(activeTARefs.current)
-                })
-            }
-
-            //reloading
-            //We need to check if the index needs to be updated
-            //grab the historicalPrices of the index of the related ticker
-            //grab the first element and check the date
-            //if the date matches the date of the longestPeriod, then proceed to make the chart
-            //if the date does not match the date of the longestPeriod from the markedDate
-                //then we want to grab the data all the way to the longestPeriod
-                //after that proceed to make the chart
-            if(e && activeTACharts.includes(e)){
-                console.log(historicalPrice[index])
-                return chartObjectHelper1(historicalPrice[index]).then(chartData => {
-                    // .then(chartData => {
-                    console.log(e)
-                    console.log(chartData)
-                    if(e === "RSI"){
-                        // return rsiHelper1(chartData, index).then(rsi_values => {
-                        //     console.log(rsi_values)
-                        //     return rsiChartHelper(rsi_values).then((svg) => {
-                        //         console.log(svg)
-                        //         activeTARefs.current.push(svg)
-                        //         console.log(activeTARefs)
-                        //         console.log(activeTARefs.current)
-                        //         setIsChartLoading(false)
-                        //         // setActiveTACharts([
-                        //         //     ...activeTACharts,
-                        //         //     'RSI'
-                        //         // ])
-                        //         // setActiveTACharts(['RSI'])
-                        //         console.log(activeTACharts)
-                        //         return svg
-                        //     })
-                        // })
-                        // setActiveTACharts([
-                        //     ...activeTACharts,
-                        //     'RSI'
-                        // ]);
-                        console.log(index)
-                        return rsiHelper1(chartData, index)
-
-                    }
-                    if(e === "MACD"){
-                        
-                        // let macd_values = macdHelper1(chartData, index)
-                        // let temp = macd_values
-                        // console.log(temp)
-                        // // temp.macd_date_arr = macd_values.macd_date_arr.slice(2)
-                        // // temp.macd_value_arr = macd_values.macd_value_arr.slice(2)
-                        // let svg = macdChartHelper(temp)
-                        // activeTARefs.current.push(svg)
-                        //         // console.log(activeTARefs)
-                        //         // console.log(activeTARefs.current)
-                        // setIsChartLoading(false)
-                        //         // setActiveTACharts([
-                        //         //     ...activeTACharts,
-                        //         //     'MACD'
-                        //         // ])
-                        //         // setActiveTACharts(['macd'])
-                        //         // console.log(activeTACharts)
-                        // return svg
-                        // setActiveTACharts([
-                        //     ...activeTACharts,
-                        //     'MACD'
-                        // ]);
-                        console.log(index)
-                        return macdHelper1(chartData, index)
-                            
-                    }
                 })
             }
         }
@@ -2766,13 +2519,11 @@ function CandlestickChartContainer({list}) {
 
         // console.log(rsi(chartObject))
 
-        let rsi_values = rsi(chartObject)
-        setRsiValues(rsi_values)
-        // .then(res => {
-        //     console.log(res)
-        //     setRsiValues(res)
-        //     return res
-        // })
+        let rsi_values = rsi(chartObject).then(res => {
+            console.log(res)
+            setRsiValues(res)
+            return res
+        })
         //returns svg.node()
 
         console.log(rsi_values)
@@ -2782,8 +2533,8 @@ function CandlestickChartContainer({list}) {
         // console.log(rsi(chartObject))
         // console.log(rsi_values)
         // return rsi_values
-        return rsiChartHelper(rsi_values)
-        // return rsi_values
+
+        return rsi_values
     }
         // let svgTaRef = useRef(null)
     // // const activeTACharts
@@ -2793,7 +2544,7 @@ function CandlestickChartContainer({list}) {
     // let activeTARefs = useRef([]);
 
 
-    const rsiChartHelper = (rsi_values) => {
+    const rsiChartHelper = async(rsi_values) => {
         console.log(rsi_values)
         const containerSize = document.querySelector(".ChartContainer").getBoundingClientRect()
         const width = containerSize.width * .95;
@@ -3012,7 +2763,10 @@ function CandlestickChartContainer({list}) {
         // activeTARefs.current.push(svgRef1)
         // activeTARefs.current.push(svg)
         console.log(activeTARefs.current[0])
-        setIsChartLoading(false)
+        setActiveTACharts([
+            ...activeTACharts,
+            'RSI'
+        ]);
         // setIsChartLoading(false);
         console.log(activeTACharts)
 
@@ -3201,16 +2955,12 @@ function CandlestickChartContainer({list}) {
         let macd_values = macd(chartObject)
         console.log(macd_values)
         setMacdValues(macd_values)
-        return macdChartHelper(macd_values)
 
-        // return macd_values;
+        return macd_values;
         
     }
 
     const macdChartHelper = (macd_values) => {
-        macd_values.macd_date_arr.slice(2)
-        macd_values.macd_value_arr.slice(2)
-
         console.log(macd_values.macd_date_arr)
         const containerSize = document.querySelector(".ChartContainer").getBoundingClientRect()
         const width = containerSize.width * .95;
@@ -3419,20 +3169,22 @@ function CandlestickChartContainer({list}) {
         // .attr("stroke-width", strokeWidth)
         // // .style("visibility", "hidden")
         // .style("opacity", "0")
-        // })
-        // activeTARefs.current.push(svgTaRef.current)
-        console.log(activeTARefs.current)
-        console.log(svg.node())
+    // })
+    // activeTARefs.current.push(svgTaRef.current)
+    console.log(activeTARefs.current)
+    console.log(svg.node())
 
-        activeTARefs.current.push(svg.node())
-        // activeTARefs.current.push(svg.node())
-        // activeTARefs.current.push(svgRef1)
-        // activeTARefs.current.push(svg)
-        console.log(activeTARefs.current[0])
-        console.log(activeTACharts)
-        setIsChartLoading(false)
+    activeTARefs.current.push(svg.node())
+    // activeTARefs.current.push(svg.node())
+    // activeTARefs.current.push(svgRef1)
+    // activeTARefs.current.push(svg)
+    console.log(activeTARefs.current[0])
+    setActiveTACharts([
+        ...activeTACharts,
+        'MACD'
+    ]);
 
-        return svg.node();
+    return svg.node();
 
     // return rsi(chartObject)
 
@@ -3457,52 +3209,11 @@ function CandlestickChartContainer({list}) {
 
     // useEffect will generate the historicalPrices whenever there is a change in the list object(tickers added/removed)
     useEffect(() => {
-        console.log(list)
         // setStateHistoricalPrice(historicalPrice)
-        
-        if(historicalPrice && historicalPrice.length > 0){
-            listData1(rangeSelector, list).then((res) => {
-                console.log(res)
-            })
-            console.log(historicalPrice)
-            console.log(list)
-            let index = historicalPrice.findIndex((element) => {
-                // element
-                let found = element.find((data) => {
-                    return data.symbol === list
-                })
-                console.log(found)
-                return found
-            })
-            console.log(index)
-            svgHelper("candlestick", index, longestPeriod)
-            if(activeTACharts && activeTACharts.length > 0){
-                console.log(activeTACharts)
-                if(activeTACharts.includes('RSI')){
-                    console.log('RSI')
-                    taHelperCallback1(list, 'RSI')
-                }
-                if(activeTACharts.includes('MACD')){
-                    console.log('MACD')
-                    taHelperCallback1(list, 'MACD')
-                }
-                
-            }
-        }
-        else{
-            console.log('new chart')
-            listData1(rangeSelector, list)
-            svgHelper("candlestick", 0, longestPeriod)
-        }
-
-
-        
-
-        // svgRef = useRef(null)
-        // .then(res => {
-        //     setStateHistoricalPrice(historicalPrice)
-        //     console.log(res)
-        // })
+        listData1(rangeSelector).then(res => {
+            setStateHistoricalPrice(historicalPrice)
+            console.log(res)
+        })
         if(isLoading === false){
             setIsLoading(true)
         }
@@ -3522,7 +3233,7 @@ function CandlestickChartContainer({list}) {
         console.log(svgTaRef)
         console.log(svgRef)
 
-        // svgHelper()
+        svgHelper()
     },[svgRef])
     useEffect(() => {
         // console.log(stateHistoricalPrice)
@@ -3545,59 +3256,14 @@ function CandlestickChartContainer({list}) {
         console.log(activeTARefs)
         console.log(svgRef)
         console.log(longestPeriod)
-        console.log(list)
-        let prices = historicalPrice.find((element) => {
-            let found = element.find((data) => data.symbol === list)
-            console.log(found)
-            return found;
-        })
-        // .then(res => {
-        //     console.log(res)
-        // })
-        console.log(prices)
 
         //start the data loading procress
-        // if(stateHistoricalPrice && stateHistoricalPrice.length > 0 && stateHistoricalPrice[0][0] && !markedDate){
-        // if(historicalPrice && historicalPrice.length > 0){
-        //     console.log('test')
-        //     svgHelper("candlestick", 0, longestPeriod)
-        //     // let temp = new Date(prices[0].date)
-        //     // setMarkedDate(temp)
-        //     // console.log(temp)
-            
-        //     // svgTAHelperCallback("RSI")
-            
-        // }
-        if(historicalPrice && historicalPrice.length > 0){
-            console.log(historicalPrice)
-            console.log(list)
-            let index = historicalPrice.findIndex((element) => {
-                // element
-                let found = element.find((data) => {
-                    return data.symbol === list
-                })
-                console.log(found)
-                return found
-            })
-            console.log(index)
-            svgHelper("candlestick", index, longestPeriod)
-            if(activeTACharts && activeTACharts.length > 0){
-                console.log(activeTACharts)
-                if(activeTACharts.includes('RSI')){
-                    console.log('RSI')
-                    taHelperCallback1(list, 'RSI')
-                }
-                if(activeTACharts.includes('MACD')){
-                    console.log('MACD')
-                    taHelperCallback1(list, 'MACD')
-                }
-                
-            }
-        }
-
-        if(historicalPrice && historicalPrice.length > 0 && !markedDate){
-            let temp = new Date(prices[0].date)
+        if(stateHistoricalPrice && stateHistoricalPrice.length > 0 && stateHistoricalPrice[0][0] && !markedDate){
+            let temp = new Date(stateHistoricalPrice[0][0].date)
             setMarkedDate(temp)
+            svgHelper("candlestick", 0, longestPeriod)
+            // svgTAHelperCallback("RSI")
+            
         }
 
         if(isChartLoading === true){
@@ -3614,7 +3280,7 @@ function CandlestickChartContainer({list}) {
             console.log(stateHistoricalPrice)
             // svgHelper("candlestick", 0)
         }
-    }, [stateHistoricalPrice, historicalPrice, longestPeriod, activeTACharts, isChartLoading])
+    }, [stateHistoricalPrice, historicalPrice, longestPeriod, isChartLoading])
 
     useEffect(() => {
         // console.log(isChartLoading)
@@ -3760,10 +3426,9 @@ function CandlestickChartContainer({list}) {
 
 
         //go fetch the price (Maybe memoized it save on api calling?)
-        listData1(rangeSelector, list)
-        // .then(res => {
-        //     console.log(res)
-        // })
+        listData1(rangeSelector).then(res => {
+            console.log(res)
+        })
         
         // listData1(rangeSelector)
         //if we change the historical price, and set the value, it would recall the useEffect that renders based on stateHistoricalPrice
@@ -3812,9 +3477,9 @@ function CandlestickChartContainer({list}) {
                         <button onClick={() => svgHelperCallback("candlestick")}>Candlestick</button>
                         <button onClick={() => svgHelperCallback("line")}>Line</button>
                         <button onClick={() => taHelperCallback(0, 'all')}>Technical Analysis</button>
-                        <button onClick={() => taHelperCallback1(list, 'RSI')}>RSI</button>
-                        <button onClick={() => taHelperCallback1(list, 'MACD')}>MACD</button>
-                        <button onClick={() => taHelperCallback1(list, 'SRSI')}>Stochastic RSI</button>
+                        <button onClick={() => taHelperCallback1(0, 'RSI')}>RSI</button>
+                        <button onClick={() => taHelperCallback1(0, 'MACD')}>MACD</button>
+                        <button onClick={() => taHelperCallback1(0, 'SRSI')}>Stochastic RSI</button>
 
                         <button onClick = {() => dateRangeCallback("1d")}>1d</button>
                         <button onClick = {() => dateRangeCallback("5d")}>5d</button>

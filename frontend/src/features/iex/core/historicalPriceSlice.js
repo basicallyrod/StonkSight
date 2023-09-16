@@ -97,7 +97,45 @@ export const historicalPriceSlice = createSlice({
             // action.payload.map((index) => (
             //     state.historicalPrice.push(index)
             // ))
-            state.historicalPrice.push(action.payload)
+            // if(state.historicalPrice.includes)
+            // state.historicalPrice[0].map(e => {
+            //     console.log(e)
+            // })
+            // if(state.historicalPrice[0]){
+            //     console.log(state)
+            // }
+            //initial load
+            if(!state.historicalPrice[0]){
+                state.historicalPrice.push(action.payload)
+                console.log(state.historicalPrice)
+            }
+            else{
+                console.log('post load')
+                //action.meta.arg.index
+                console.log(state.historicalPrice[0][0].symbol)
+                if(!state.historicalPrice.find((element) => {
+                    console.log(element[0].symbol)
+                    let found = element.find((data) => data.symbol === action.meta.arg.ticker)
+                    console.log(found)
+                    return found;
+                })){
+                    if(undefined){
+                        console.log('the element doesnt exists')
+                    }
+                    else{
+                        console.log('the element exists')
+                        state.historicalPrice.unshift(action.payload)
+                    }
+                    
+                    
+                }
+                console.log(state.historicalPrice[0][0].symbol)
+
+            }
+
+            console.log(action.payload)
+            // console.log(state.)
+            // state.historicalPrice.push(action.payload)
         })
         .addCase(getHistoricalData.rejected, (state, action) => {
             state.isLoading = false
@@ -124,20 +162,74 @@ export const historicalPriceSlice = createSlice({
         })
         .addCase(getSpecificHistoricalDataRange.fulfilled, (state, action) => {
             console.log(action.payload)
+            // console.log(action.arg.ticker)
             let data = action.payload
             console.log(data)
+
+            let index = state.historicalPrice.findIndex((element) => {
+                // element
+                let found = element.find((data) => {
+                    return data.symbol === action.meta.arg.ticker
+                })
+                console.log(found)
+                return found
+            })
+            console.log(index)
+
             state.isLoading = false
             state.isSuccess = true
-            data.map((day) => {
-                console.log(day.priceDate)
-                if(state.historicalPrice.includes(day.priceDate)){
-                    console.log('exists')
+            // data.map((day) => {
+            //     console.log(day.priceDate)
+            //     if(state.historicalPrice.includes(day.priceDate)){
+            //         console.log('exists')
+            //     }
+            //     else{
+            //         state.historicalPrice[action.meta.arg.index].unshift(day)
+            //     }
+                
+            // })
+
+            //check if the earliest date(last element) is already in the historicalPrice array
+
+            //look at each index of the historicalPrice array
+            //if we don't find earlist date in the state, update the state
+            if(!state.historicalPrice[index].find((element) => {
+                console.log(element)
+                console.log(data[data.length - 1].priceDate)
+                console.log(element.priceDate)
+                //look at each index for the index of the historicalPrice array(the day of X stock) and see if we can find the earlist date
+                // let found = element.find((data) => {
+                //     console.log(data.priceDate)
+                //     return (data.priceDate === action.payload[action.payload.length - 1].priceDate)
+                // })
+                // console.log(found)
+                // console.log(found.priceDate)
+                // return found;
+                return (element.priceDate === action.payload[action.payload.length - 1].priceDate)
+            })){
+                //if not found, return undefined
+                if(undefined){
+                    console.log('the element exists')
+
                 }
+                //if found return the first element
                 else{
-                    state.historicalPrice[action.meta.arg.index].unshift(day)
+                    console.log('the element doesnt exists')
+                    data.map((day) => {
+                        console.log(day.priceDate)
+                        if(state.historicalPrice[index].includes(day.priceDate)){
+                            console.log('exists')
+                        }
+                        else{
+                            state.historicalPrice[index].unshift(day)
+                        }
+                        
+                    })
+                    // state.historicalPrice.unshift(action.payload)
                 }
                 
-            })
+                
+            }
             // for(let day of data){
             //     console.log(day)
             //     if(data.includes(day)){

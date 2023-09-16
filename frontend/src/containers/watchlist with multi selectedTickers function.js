@@ -33,7 +33,7 @@ function WatchlistContainer() {
     state.lists)
     const {latestPrice} = useSelector ((state) => state.latestPrice.latestPrice )
     const {historicalPrice} = useSelector((state) => state.historicalPrice)//react redux state
-    let [selectedTickers, setSelectedTickers] = useState()
+    let [selectedTickers, setSelectedTickers] = useState([])
     let [watchlistArray, setWatchlistArray] = useState([])
     let [priceStack, setPriceStack] = useState([]);
     let [tickerQueue, setTickerQueue] = useState([]);
@@ -148,40 +148,115 @@ function WatchlistContainer() {
     }
     //change the state of isOn at a specific index
     const handleToggle = (e, id , id1) => {
-        console.log(e)
-        console.log(id)
-        console.log(id1)
-        console.log(priceObject)
-        console.log(priceObject[0][id])
-        console.log(priceObject[0][id].list[id1])
-        setSelectedTickers(priceObject[0][id].list[id1].symbol)
-        // const updatedIsOn = {...priceObject[0][id].list[id1], isOn: !priceObject[0][id].list[id1].isOn}
-        // console.log(updatedIsOn)
+        // console.log(e)
+        // console.log(id)
+        // console.log(id1)
+        // console.log(priceObject)
+        // console.log(priceObject[0][id])
+        // console.log(priceObject[0][id].list[id1])
+        const updatedIsOn = {...priceObject[0][id].list[id1], isOn: !priceObject[0][id].list[id1].isOn}
+        console.log(updatedIsOn)
 
-        // let listObject = {...priceObject[0][id]}
+        let listObject = {...priceObject[0][id]}
+        // console.log(listObject)
+
+        // //Slice the list & ticker out of the button pressed
+        const newPriceObjectArray = [
+            ...priceObject[0][id].list.filter(a => a.itemId !== id1)
+        ]
+        // console.log(newPriceObjectArray)
+        // console.log(priceObject[0][id].list.filter(a => a.itemId !== id1))
+
+        //Update the tickerList Array with the new info
+        const slicedTNATicker = [
+            ...priceObject[0][id].list.slice(0, id1), //items before the insertion point
+            updatedIsOn, //updated isOn at the index
+            ...priceObject[0][id].list.slice(id1+1) //items after the insertion point
+        ]  
+        // console.log(slicedTNATicker)
         
-        // // //filter using the id as the key
-        // const newPriceObject = [
-        //     ...priceObject[0].filter(a => a.listId !== id)
-        // ]
-        // // console.log(newPriceObject)
+        //shove the slicedTNATicker 
+        listObject = {
+            ...priceObject[0][id], list: slicedTNATicker
+        }   
+        // console.log(listObject)
+        
+        // //filter using the id as the key
+        const newPriceObject = [
+            ...priceObject[0].filter(a => a.listId !== id)
+        ]
+        // console.log(newPriceObject)
 
+        const slicedTNAList = [
+            ...priceObject[0].slice(0,id),
+            listObject,
+            ...priceObject[0].slice(id+1)
+        ]
+        // console.log(priceObject[0].slice(0,id))
+        
+        // console.log(priceObject[0].slice(id + 1))
+
+        // console.log(slicedTNAList)
+
+
+        setPriceObject([
+            slicedTNAList,
+            ...priceObject
+        ])
+        //remove the ticker if it is in the array
+        if(selectedTickers.includes(priceObject[0][id].list[id1].symbol)){
+            setSelectedTickers(
+                selectedTickers.filter(t =>
+                    t !== priceObject[0][id].list[id1].symbol
+                )
+            )
+        }
+        //add the ticker if not in the array
+        else {
+            setSelectedTickers([
+                ...selectedTickers,
+                priceObject[0][id].list[id1].symbol
+            ])
+        }
+        
+        
+        // const updatedIsOn = {...watchlistArray[id].tickerList[id1], isOn: !watchlistArray[id].tickerList[id1].isOn}
+        
+        
+        // let listObject = {...watchlistArray[id]}
+
+        // // //Slice the list & ticker out of the button pressed
+        // const newwatchlistArray = [
+        //     ...watchlistArray[id].tickerList.filter(a => a.index !== id1)
+        // ]
+
+        // // //Update the tickerList Array with the new info
+        // const slicedTNATicker = [
+        //     ...newwatchlistArray.slice(0, id1), //items before the insertion point
+        //     updatedIsOn, //updated isOn at the index
+        //     ...newwatchlistArray.slice(id1) //items after the insertion point
+        // ]
+
+        // //shove the slicedTNATicker 
+        // listObject = {
+        //     ...watchlistArray[id], tickerList: slicedTNATicker
+        // }
+
+        // //filter using the id as the key
+        // const newwatchlistArray1 = [
+        //     ...watchlistArray.filter(a => a.key !== id)
+        // ]
         // const slicedTNAList = [
-        //     ...priceObject[0].slice(0,id),
+        //     ...newwatchlistArray1.slice(0,id),
         //     listObject,
-        //     ...priceObject[0].slice(id+1)
+        //     ...newwatchlistArray1.slice(id)
         // ]
-
-
-        // setPriceObject([
-        //     slicedTNAList,
-        //     ...priceObject
-        // ])
+        // setWatchlistArray(slicedTNAList)
         // //remove the ticker if it is in the array
-        // if(selectedTickers.includes(priceObject[0][id].list[id1].symbol)){
+        // if(selectedTickers.includes(watchlistArray[id].tickerList[id1].symbol)){
         //     setSelectedTickers(
         //         selectedTickers.filter(t =>
-        //             t !== priceObject[0][id].list[id1].symbol
+        //             t !== watchlistArray[id].tickerList[id1].symbol  
         //         )
         //     )
         // }
@@ -189,7 +264,7 @@ function WatchlistContainer() {
         // else {
         //     setSelectedTickers([
         //         ...selectedTickers,
-        //         priceObject[0][id].list[id1].symbol
+        //         watchlistArray[id].tickerList[id1].symbol
         //     ])
         // }
     }
