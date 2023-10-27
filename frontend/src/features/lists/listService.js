@@ -28,6 +28,7 @@ const getLists = async (token) => {
             Authorization: `Bearer ${token}`,
         },
     }
+    console.log(`listService getLists ${token}`)
     const response = await axios.get(API_URL, config)
     return response.data
 }

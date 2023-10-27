@@ -105,7 +105,7 @@ function LoginContainer(){
                     </div>
                     <div className = 'form-group'>
                         <button type = 'submit' className = 'btn btn-block'>
-                            Submit
+                            Login
                         </button>
                     </div>
                     
@@ -115,6 +115,11 @@ function LoginContainer(){
                 </form>
 
             </section>
+            <div className = 'register-div-button'>
+                <button type = 'register-button'>
+                    Register
+                </button>
+            </div>
         </>
         
     )

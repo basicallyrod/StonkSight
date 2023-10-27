@@ -33,8 +33,8 @@ import {logout, reset} from '../features/auth/authSlice'
             <Header.Wrapper>
                 <Header.Row>
                         <Header.Title>
-                            StonkSight
-                            
+                            StonkSight1
+                                                                                                                                                                                                                                                                                                                                                                    
                         </Header.Title>
                         <Navbar.Wrapper>
 
@@ -42,30 +42,30 @@ import {logout, reset} from '../features/auth/authSlice'
                                 {user ? (
                                     <>
                                     <Navbar.Title>
-                                        <Navbar.StyledLink to = "/">
+                                        <Navbar.StyledLink to = "/watchlist">
                                             Home
                                         </Navbar.StyledLink>
                                     </Navbar.Title>
-                                    <Navbar.Title>
+                                    {/* <Navbar.Title>
                                         <Navbar.StyledLink to ="/watchlist">
                                             Watchlist
                                         </Navbar.StyledLink>
-                                    </Navbar.Title>
-                                    <Navbar.Title>
+                                    </Navbar.Title> */}
+                                    {/* <Navbar.Title>
                                         <Navbar.StyledLink to ="/heatmap">
                                             Heatmap
                                         </Navbar.StyledLink>
-                                    </Navbar.Title>
-                                    <Navbar.Title>
+                                    </Navbar.Title> */}
+                                    {/* <Navbar.Title>
                                         <Navbar.StyledLink to ="/candlestickchart">
                                             Candlestick Chart
                                         </Navbar.StyledLink>
-                                    </Navbar.Title>
-                                    <Navbar.Title>
+                                    </Navbar.Title> */}
+                                    {/* <Navbar.Title>
                                         <Navbar.StyledLink to ="/linechart">
                                             Line Chart
                                         </Navbar.StyledLink>
-                                    </Navbar.Title>
+                                    </Navbar.Title> */}
                                     <Navbar.Title>
                                         <Navbar.StyledLink to ="/profile">
                                             {user.name}
@@ -84,27 +84,27 @@ import {logout, reset} from '../features/auth/authSlice'
                                 ) : (
                                     <>
                                         <Navbar.Title>
-                                            <Navbar.StyledLink to = "/">
+                                            <Navbar.StyledLink to = "/watchlist">
                                                 Home
                                             </Navbar.StyledLink>
                                         </Navbar.Title>
 
-                                        <Navbar.Title>
+                                        {/* <Navbar.Title>
                                             <Navbar.StyledLink to = "/login">
                                                 Login
                                             </Navbar.StyledLink>
-                                        </Navbar.Title>
+                                        </Navbar.Title> */}
 
-                                        <Navbar.Title>
+                                        {/* <Navbar.Title>
                                             <Navbar.StyledLink to ="/register">
                                                 Register
                                             </Navbar.StyledLink>
-                                        </Navbar.Title>
-                                        <Navbar.Title>
+                                        </Navbar.Title> */}
+                                        {/* <Navbar.Title>
                                             <Navbar.StyledLink to ="/dashboard">
                                                 Dashboard
                                             </Navbar.StyledLink>
-                                        </Navbar.Title>
+                                        </Navbar.Title> */}
                                     </>
                                 
                                 )}

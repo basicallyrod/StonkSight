@@ -1,6 +1,9 @@
 {
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^2.9.8",
+    "@mui/material": "^5.14.14",
     "@polygon.io/client-js": "^7.2.5",
     "@svgr/plugin-jsx": "^6.5.0",
     "@svgr/plugin-prettier": "^6.5.0",
@@ -17,6 +20,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.5.4",
     "path": "^0.12.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "styled-react-modal": "^3.0.1",
     "yup": "^0.32.11"
   },

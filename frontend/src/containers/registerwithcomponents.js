@@ -58,10 +58,10 @@ function RegisterContainer() {
         if(isError) {
             toast.error(message)
             console.log('error')
-            navigate('/')
+            navigate('/login')
         }
         if(isSuccess || user) {
-            navigate('/dashboard')
+            navigate('/watchlist')
             console.log('success')
         }
 
@@ -101,7 +101,7 @@ function RegisterContainer() {
     return (
         <>
             <Home className = "Register">
-                <Home.Wrapper>
+                <Home.CenterWrapper>
                     
                     <Home.Title>Registeration Page</Home.Title>
                     <Home.Text>Please create an account</Home.Text>
@@ -109,7 +109,7 @@ function RegisterContainer() {
 
                     <Form.TextInput onSubmit = {onSubmit}>
                         <Form.Wrapper>
-                            <Form.Label>Username</Form.Label>
+                            {/* <Form.Label>Username</Form.Label> */}
                             <Form.StyledInput
                             type = 'text'
                             className = 'form-control'
@@ -156,7 +156,7 @@ function RegisterContainer() {
                     </Form.TextInput>
 
 
-                </Home.Wrapper>
+                </Home.CenterWrapper>
             </Home>
 
         </>

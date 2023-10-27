@@ -18,6 +18,7 @@ function LoginContainer(){
     const { email, password} = formData;
 
     const onChange = (e) => {
+        console.log(e)
         setFormData((prevState) => ({
             ...prevState,
             [e.target.name]: e.target.value,
@@ -37,19 +38,22 @@ function LoginContainer(){
             toast.error(message)
         }
         if(isSuccess || user) {
-            navigate('/dashboard')
+            navigate('/watchlist')
         }
 
         dispatch(reset())
     }, [user, isError, isSuccess, message, navigate, dispatch])
 
     const onSubmit = (err) => {
+        
         err.preventDefault()
+        console.log(formData)
 
         const userData = {
             email,
             password
         }
+        console.log(userData)
         dispatch(login(userData))
     };
 
@@ -61,12 +65,12 @@ function LoginContainer(){
     return (
         <>
             <Home className = "Login">
-                <Home.Wrapper>
+                <Home.CenterWrapper>
                     
                     <Home.Title>Login Page</Home.Title>
                     <Home.Text>Please create an account</Home.Text>
                     
-                    <Form onSubmit = {onSubmit}>
+                    <Form.TextInput onSubmit = {onSubmit}>
                         <Form.Wrapper>
                             <Form.StyledInput
                                 type = 'email'
@@ -86,14 +90,37 @@ function LoginContainer(){
                                 value = {password}
                                 onChange = {onChange}
                             />
+                            {/* <div className = 'form-group'>
+                                <button type = 'submit' className = 'btn btn-block'>
+                                    Login
+                                </button>
+                            </div> */}
                             <Button className = 'form-group'>
                                 <Button.StyledButton type = 'submit' className = 'btn btn-block'>
                                     Submit
                                 </Button.StyledButton>
                             </Button>
+
+                            {/* <Form className = 'form-group'> */}
+                            {/* <Form.StyledButton type = 'submit' className = 'btn btn-block'>
+                                Submit
+                            </Form.StyledButton> */}
+                            {/* </Form> */}
                         </Form.Wrapper>
-                    </Form>
-                </Home.Wrapper>
+
+
+
+                    </Form.TextInput>
+                    <div className = 'register-div-button'>
+                        <button type = 'register-button'>
+                            {/* Register */}
+                            <Form.StyledLink to ="/register">
+                                Register
+                            </Form.StyledLink>
+                        </button>
+                    </div>
+
+                </Home.CenterWrapper>
             </Home>
 
         </>

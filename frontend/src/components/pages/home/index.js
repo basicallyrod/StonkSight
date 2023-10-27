@@ -1,8 +1,8 @@
-import { Container, Wrapper, BalanceWrapper, Wrapper1, ChartWrapper, ChartControllerWrapper, NewsfeedWrapper,  Background, 
+import { Container, Wrapper, CenterWrapper, BalanceWrapper, Wrapper1, ChartWrapper, ChartControllerWrapper, NewsfeedWrapper,  Background, 
     BackgroundContent, TexturedBody, Picture, Logo, Row, UnderlineRow, Column, Body, InnerBody, OuterBody,
     Link, StyledLink, Title, Subtitle,
     Education, Project, LeftColumn, RightColumn, Text,
-    List, UList, CarouselWrapper, Button, Form } 
+    List, UList, CarouselWrapper, Button, Form, Card } 
     from "./styles/home";
 
 const Home = ({ children, ...restProps }) => {
@@ -11,6 +11,9 @@ const Home = ({ children, ...restProps }) => {
 
 Home.Wrapper = ({children, ...restProps}) => {
     return <Wrapper {...restProps}>{children}</Wrapper>;
+};
+Home.CenterWrapper = ({children, ...restProps}) => {
+    return <CenterWrapper {...restProps}>{children}</CenterWrapper>;
 };
 Home.BalanceWrapper = ({children, ...restProps}) => {
     return <BalanceWrapper {...restProps}>{children}</BalanceWrapper>;
@@ -131,6 +134,10 @@ Home.Button = ({ children, ...restProps}) => {
 
 Home.Form = ({ children, ...restProps}) => {
     return <Form {...restProps}>{children}</Form>;
+};
+
+Home.Card = ({ children, ...restProps}) => {
+    return <Card {...restProps}>{children}</Card>;
 };
 
 export default Home;

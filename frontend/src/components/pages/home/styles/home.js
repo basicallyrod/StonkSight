@@ -18,15 +18,17 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
+    /* width: 25vw; */
     /* background: #1A3947; */
     /* background: #242424; */
     /* height: 200px; */
     /* height: 100px; */
-    width: 15vw;
+    /* width: auto; */
     /* display: table;  */
-    padding: 2vh 2vw;
-    margin: 50px 50px;
+    /* padding: 2vh 2vw; */
+    /* margin: 50px 50px; */
     flex-direction: column;
+    
     
     /* border: solid; */
     /* border-radius: 10px; */
@@ -41,27 +43,38 @@ const Wrapper = styled.div`
     /* align-content: center; */
     /* margin-left: 20% auto; */
     /* margin-right: 20% auto; */
-    &::-webkit-scrollbar {
+    /* &::-webkit-scrollbar {
         width: 10px;
         background: red;
-    }
+    } */
 `;
+
+const CenterWrapper = styled.div`
+    background: #242424;
+    padding: 25vh 25vw;
+    border: solid;
+    border-radius: 10px;
+    border-width: .25vh .25vw;
+    border-color: #AB9DF2;
+`
 
 const BalanceWrapper = styled.div`
     /* background: #1A3947; */
     background: #242424;
     /* height: 200px; */
     /* height: 100px; */
-    /* width: 10vw; */
+    /* width: 20vw; */
     height: 10vh;
     /* display: table; */
-    padding: 2vh 2vw;
+    /* padding: 2vh 2vw; */
     /* margin: 20vh 0px; */
-    margin-bottom: 10vh;
+    /* margin-bottom: 10vh; */
     border: solid;
     border-radius: 10px;
     border-width: .25vh .25vw;
     border-color: #AB9DF2;
+    box-shadow: 5px 10px 15px #333
+      ,6px 12px 15px #222;
 
     /* display: inline-block; */
     /* flex-direction: column; */
@@ -83,14 +96,14 @@ const Wrapper1 = styled.div`
     background: #1A3947;
     /* background: #242424; */
     display: table;
-    padding: 2vh 2vw;
-    margin: 0 50px;
+    /* padding: 2vh 2vw; */
+    /* margin: 0 50px; */
     border: solid;
     border-radius: 10px;
     border-width: .25vh .25vw;
     border-color: #AB9DF2;
 
-    width: 20vw;
+    /* width: 20vw; */
     &::-webkit-scrollbar {
         width: 10px;
         background: red;
@@ -103,18 +116,22 @@ const ChartWrapper = styled.div`
     /* background: #242424; */
     height: 75vh;
     /* height: 1400px; */
-    width: 55vw;
+    width: 75vw;
     top: 50%;
     left: 50%;
+
     /* margin: 0 50px; */
     border: solid;
     /* border-radius: 10px; */
     /* border-width: .25vh .25vw; */
     /* padding */
-    padding: 10% 10%;
-    border-color: #AB9DF2;
+    /* padding: 10% 10%; */
+    border-color: #222222;
+    border-radius: 10px;
     display: inline-block;
     flex-direction: column;
+    box-shadow: 5px 10px 15px #333
+      ,6px 12px 15px #222;
     /* border: 5em; */
     /* border-color: red; */
     /* justify-content: space-evenly; */
@@ -132,20 +149,25 @@ const ChartControllerWrapper = styled.div`
     margin: 2vh;
     /* height:10vh; */
     width: 55vw;
+    box-shadow: 5px 10px 15px #333
+      ,6px 12px 15px #222;
     background: #49464E;
 `
 
 const NewsfeedWrapper = styled.div`
-    margin: 0 50px;
-    padding: 2vh 2vw;
+    /* margin: 0 50px; */
+    height: 60vh;
+    /* padding: 2vh 2vw; */
     border: solid;
     border-radius: 10px;
-    border-width: .25vh .25vw;
+    /* border-width: .25vh .25vw; */
     border-color: #AB9DF2;
 
-    width: 25vw;
+    /* width: 20vw; */
     height: relative;
     background: #37343A;
+    overflow-y: scroll;
+    /* overflow:hidden; */
 `
 
 // const Scrollbar = styled.div``
@@ -446,9 +468,22 @@ const Form = styled.form`
   font-family: inherit;
 `
 
+const Card = styled.div`
+  width: 80%;
+  height: 25%;
+  background: pink;
+  padding: 10px;
+  border: 1px solid #e6e6e6;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  /* fit-content: fit; */
+  /* font-family: inherit; */
+`
+
 export {
     Container,
     Wrapper,
+    CenterWrapper,
     BalanceWrapper,
     Wrapper1,
     ChartWrapper,
@@ -478,6 +513,7 @@ export {
     UList,
     CarouselWrapper,
     Button,
-    Form
+    Form,
+    Card
 };
 

@@ -198,7 +198,24 @@ const getOHLC = (ticker) => {
 
 }
 
-const getNews = () => {
+const getArticles = (ticker) => {
+    console.log(`https://cloud.iexapis.com/stable/stock/${ticker}/news?token=pk_f2b12e738efc48ffbac89e2a756fb546`)
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        }, 
+    }
+    const response = axios.get(`https://cloud.iexapis.com/stable/stock/${ticker}/news?token=pk_f2b12e738efc48ffbac89e2a756fb546`)
+    .then(res => {
+        if(res.ok){
+            throw new Error(`Request failed with status ${res.status}`)
+        }
+        // return response.json()
+        console.log(res.data)
+        return res.data
+    })
+
+    return response
 
 }
 
@@ -209,7 +226,7 @@ export const coreService = {
     getHistoricalData,
     getSpecificHistoricalDataRange,
     getSpecificHistoricalData,
-    getNews
+    getArticles
     
 }
 

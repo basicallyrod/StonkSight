@@ -92,4 +92,8 @@ Form.StyledButton = ({children, ...restProps}) => {
     return <StyledForm.StyledButton {...restProps}>{children}</StyledForm.StyledButton>;
 };
 
+Form.StyledLink = ({children, ...restProps}) => {
+    return <StyledForm.StyledLink {...restProps}>{children}</StyledForm.StyledLink>;
+};
+
 export default Form;

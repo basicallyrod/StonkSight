@@ -32,6 +32,7 @@ export const getLists = createAsyncThunk('lists/getAll',
     async (_, thunkAPI) => {
         try {
             const listIndex = thunkAPI.getState().lists;
+            console.log(thunkAPI.getState().auth)
             const token = thunkAPI.getState().auth.user.token
             console.log(`FrontEnd getLists: ${token}`)
             return await listService.getLists(token)
@@ -87,7 +88,7 @@ export const addTicker = createAsyncThunk('lists/addTicker',
             const message = (error.response && error.response.data && error.response.data.message)
             error.message ||
             error.toString()
-        return thunkAPI.rejectWithValue(message)
+            return thunkAPI.rejectWithValue(message)
         }
     }
 )
@@ -124,7 +125,7 @@ export const listSlice = createSlice({
         })
         .addCase(createList.rejected, (state, action) => {
             state.isLoading = false
-            state.isSuccess = true
+            state.isSuccess = false
             // state.lists.push(action.payload)
         })
 
@@ -139,11 +140,9 @@ export const listSlice = createSlice({
         })
         .addCase(getLists.rejected, (state, action) => {
             state.isLoading = false
-            state.isSuccess = true
+            state.isSuccess = false
             state.lists.push(action.payload)
         })
-
-
         .addCase(deleteList.pending, (state) => {
             state.isLoading = true
         })
@@ -154,7 +153,7 @@ export const listSlice = createSlice({
         })
         .addCase(deleteList.rejected, (state, action) => {
             state.isLoading = false
-            state.isSuccess = true
+            state.isSuccess = false
             state.lists.push(action.payload)
         })
 
@@ -169,7 +168,7 @@ export const listSlice = createSlice({
         })
         .addCase(updateList.rejected, (state, action) => {
             state.isLoading = false
-            state.isSuccess = true
+            state.isSuccess = false
             state.lists.push(action.payload)
         })
 
@@ -185,7 +184,7 @@ export const listSlice = createSlice({
         })
         .addCase(addTicker.rejected, (state, action) => {
             state.isLoading = false
-            state.isSuccess = true
+            state.isSuccess = false
             // state.lists.push(action.payload)
         })
 
@@ -200,7 +199,7 @@ export const listSlice = createSlice({
         })
         .addCase(deleteTicker.rejected, (state, action) => {
             state.isLoading = false
-            state.isSuccess = true
+            state.isSuccess = false
             state.lists.push(action.payload)
         })
     }

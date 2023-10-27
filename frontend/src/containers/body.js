@@ -1,10 +1,36 @@
-import React from "react";
+import { useState, useEffect } from 'react'
 // import Footer from "../components/footer"
 import Home from "../components/pages/home/index.js"
 import Grid from "../components/commonElements/grid/index.js"
+import {toast} from 'react-toastify' 
+
+import {login, reset} from '../features/auth/authSlice'
+import {useSelector, useDispatch} from 'react-redux'
+import { useNavigate} from 'react-router-dom'
+
 
 
 function BodyContainer() {
+    const {user, isLoading, isError, isSuccess, message } = useSelector(
+        (state) => state.auth)
+        
+    const navigate  = useNavigate()
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        if(isError) {
+            toast.error(message)
+            console.log('error')
+            navigate('/login')
+        }
+        if(isSuccess || user) {
+            navigate('/watchlist')
+            console.log('success')
+        }
+
+        dispatch(reset())
+    }, [user, isError, isSuccess, message, navigate, dispatch])
+    
     return (
         <>
             <Home>

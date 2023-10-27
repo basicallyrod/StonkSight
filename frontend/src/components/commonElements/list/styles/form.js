@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { gsap } from "gsap";
+import { Link } from 'react-router-dom';
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -12,10 +13,14 @@ const Container = styled.div`
     
     /* width: 15vw; */
     border: solid;
-    border-color: red;
+    border-color: #222;
     border-radius: 5px;
-    height: 66%;
-    overflow-y: hidden;
+    /* height: 66%; */
+    height: 33vh;
+    overflow-y: scroll;
+    box-shadow: 5px 10px 15px #333
+      ,6px 12px 15px #222;
+      /* 10px 20px #222; */
     /* height: 200px; */
     /* display: table;
     &::table {
@@ -30,9 +35,10 @@ const Wrapper = styled.div`
   /* height: relative; */
   
   border: solid;
-  border-color: green;
+  /* border-color: green; */
   border-radius: 5px;
   padding: 25px 0;
+  
   /* width: 77%; */
 `
 const Wrapper1 = styled.div`
@@ -65,7 +71,17 @@ const Label = styled.button`
 `
 
 const Text = styled.p`
-  margin: 8px auto;
+  margin:0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* vertical-align: middle; */
+  top: 50%;
+  left: 50%;
+  /* transform: translate(50%, -50%); */
+  margin-block: 0px;
+  margin-inline: 0px;
+  /* margin: 8px auto; */
 `
 
 const Error = styled(Text)`
@@ -93,10 +109,13 @@ const StyledButton = styled.button`
   margin: 5px 0;
   color: ${props => props.theme.color ? props.theme.color: "grey"};
   /* background: ${(props) => (props.isOn === true) ? 'red' : props.theme.background}; */
-  background: ${(props) => (props.isOn === true) ? '#848089' : '#695D68'};
+  /* background: ${(props) => (props.isOn === true) ? '#848089' : '#695D68'}; */
+  background: linear-gradient(-90deg, #848089 80%, green 20%);
+  background: ${(props) => (props.changePercent >= 0) ? 'linear-gradient(-90deg, #848089 80%, green 20%)' : 'linear-gradient(-90deg, #848089 80%, red 20%)'};
   height: ${props => props.theme.height};
   width: ${props => props.theme.width};
   border: solid;
+  border-radius: 10px;
   border-color: ${(props) => (props.isOn === true) ? 'white' : "#211F21"};
   /* background-color: ${(props) => (props.isOn === true) ? 'red' : props.theme.main}; */
 `;
@@ -110,16 +129,20 @@ const StyledButton = styled.button`
 
 const StyledTable = styled.table`
   background: ${props => props.theme.background ? "#605D68" : props.theme.background};
+  /* border-color: white; */
   /* border: solid yellow; */
-  border-radius: 5px;
+  border-radius: 10px;
+  border-spacing: 0px;
   /* padding: 25px 50px; */
   /* margin: 25px 50px; */
-  height: 100%;
+  height: 10vh;
+  /* height: 100%; */
   display: table;
 
   /* height: 100%; */
   /* width: 50px; */
-  width: 100%;
+  /* width: 100%; */
+  /* width: 20vw; */
   /* width: relative; */
   /* width: 15vw; */
   border-collapse: separate;
@@ -129,13 +152,13 @@ const StyledTable = styled.table`
 `
 
 const StyledTBody1 = styled.tbody`
-/* background: hsl(52 78% 40%); */
-background: ${props => props.watchlistChange ? "red" : "green"};;
+background: hsl(52 78% 40%);
+/* background: ${props => props.watchlistChange ? "red" : "green"};; */
 border: solid;
-border-radius: 5px;
+border-radius: 10px;
 /* padding-right: 25%; */
-height: 40vh;
-width: 80%;
+height: 18vh;
+width: 100%;
 display: block;
   overflow-y: scroll;
   scroll-snap-type:y mandatory;
@@ -176,37 +199,42 @@ const StyledTD = styled.td`
   /* border-top: 1em solid grey; */
   /* border-bottom: 1em solid grey; */
   border-collapse: separate;
-  border-spacing: 0 50px;
-  padding: 10px 0px;
+  border-spacing: 0 0px;
+  padding: 0px;
   /* border-color: red; */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: normal;
   align-items: center;
-  height: 100%;
+  /* height: vh; */
+  /* width: 100%; */
   scroll-snap-align: start;
   position: relative;
 `
 
 const StyledTBody = styled.tbody`
-  height: 100%;
+  /* height: 100%; */
   /* height: 50%; */
   /* padding: 25px 50px; */
+  /* background-color: white; */
   display: block;
+  border-radius: 10px;
+  border-color: red;
   /* width: relative; */
   overflow-y: scroll;
+  overflow-x: hidden;
   scroll-snap-type:y mandatory;
   scroll-snap-points-y: repeat(100%);
   &::-webkit-scrollbar {
         width: 10px;
         border: 1px solid white;
     }
-  &::-webkit-scrollbar-thumb {
+  /* &::-webkit-scrollbar-thumb {
     border: 1px solid blue;
     width: 10px;
     background-color: teal;
 
-  }
+  } */
 
                             
 `
@@ -255,14 +283,38 @@ const StyledTBody = styled.tbody`
 // `
 
 const FormRow = styled.div`
-  width: 300px;
-  margin: 20px auto;
-`
+  display: flex;
+  background: #333;
+  border: thin solid #777;
+  height: 8vh;
+  width: 100%;
+  font-size: 30px;
+  color: #777;
+  text-align: center;
+  vertical-align: middle;
+  /* align-items: center; */
+  justify-content: center;
+  /* margin: 20px auto; */
 
+`
+const StyledLink = styled(Link)`
+    color: #242424;
+    font-size: 18px;
+    text-decoration: none;
+
+    &:hover {
+        color: #5F021F;
+        text-decoration: underline;
+        text-decoration-thickness: 4px;
+        
+        text-underline-offset: 16px;
+        transition: 200ms ease-in;
+    }
+`;
 
 
 
 export {
-    Container, Wrapper, Wrapper1, TextInput, Label, Text, Error, StyledInput, StyledButton, StyledTable, StyledTBody1, StyledTHead, StyledTR, StyledTD, StyledTBody, FormRow
+    Container, Wrapper, Wrapper1, TextInput, Label, Text, Error, StyledInput, StyledButton, StyledTable, StyledTBody1, StyledTHead, StyledTR, StyledTD, StyledTBody, FormRow, StyledLink
 }
 

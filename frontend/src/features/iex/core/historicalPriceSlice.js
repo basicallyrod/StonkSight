@@ -25,12 +25,12 @@ export const getSpecificHistoricalData = createAsyncThunk('lists/getSpecificHist
                 console.log(`coreSlice getSpecificHistoricalData: ${ticker} | ${day}`)
                 // const token = thunkAPI.getState().auth.user.token
                 return coreService.getSpecificHistoricalData(ticker, day);
-        }
+            }
         } catch (error) {
             const message = (error.response && error.response.data && error.response.data.message)
             error.message ||
             error.toString()
-        return thunkAPI.rejectWithValue(message)        
+            return thunkAPI.rejectWithValue(message)        
         }
     }
 )
