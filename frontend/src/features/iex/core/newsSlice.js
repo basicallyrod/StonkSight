@@ -1,5 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import coreService from './coreService'
+import { format, compareAsc } from 'date-fns'
 
 const initialState = {
     articles: [],
@@ -23,6 +24,10 @@ export const getArticles = createAsyncThunk('articles/getArticles',
     
                 let articles = coreService.getArticles(ticker)
                 console.log(articles)
+                // articles.map((entry,index) => {
+                //     console.log(entry)
+                //     console.log(index)
+                // })
                 return articles
             }
 
@@ -52,7 +57,13 @@ export const newsSlice = createSlice({
             state.isLoading = false
             state.isSuccess = true
             console.log(action.payload)
-            state.articles.push(action.payload)
+            let articles = action.payload
+            articles.map((entry, key) => {
+                console.log(entry)
+                // console.log(format(articles[key].datetime, "MMM d"))
+                articles[key].datetime = format(articles[key].datetime, "MMM d")
+            })
+            state.articles.push(articles)
         })
         .addCase(getArticles.rejected, (state, action) => {
             state.isLoading = false

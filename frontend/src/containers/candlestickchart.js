@@ -8,6 +8,8 @@ import { rolling_ema, rolling_sma } from '../features/technical_analysis_formula
 import { macd, signal } from '../features/technical_analysis_formulas/macd.js'
 import { rsi } from '../features/technical_analysis_formulas/rsi'
 import Home from "../components/pages/home/index.js"
+import Button from "../components/commonElements/buttons"
+import Form from '../components/commonElements/list'
 // function CandlestickChartContainer({list, chartParameters}) 
 const CandlestickChartContainer = ({list, chartParameters}) => {
     console.log(list)
@@ -429,7 +431,9 @@ const CandlestickChartContainer = ({list, chartParameters}) => {
 
     const CandlestickChart = async(chartObject, taCharts) => {
         const xFormat = "%m-%d-%y";
-        const yFormat = "~f";
+        
+        let s = Object.assign(d3.formatSpecifier("f"), {precision: d3.precisionFixed(0.01)})
+        const yFormat = s;
         const title = 'AAPL';
         // console.log(index)
         // console.log(chartObjectData[index])
@@ -448,9 +452,9 @@ const CandlestickChartContainer = ({list, chartParameters}) => {
         const width = containerSize.width;
         const height = containerSize.height * (1 - (.15 * taCharts));
         const marginTop = 50;
-        const marginRight = 50;
+        const marginRight = 0;
         const marginBottom = 50;
-        const marginLeft = 50;
+        const marginLeft = 0;
     
         //generates the OHLC 
         let X = d3.map(chartObject.chartDate[0], x => x);
@@ -518,8 +522,8 @@ const CandlestickChartContainer = ({list, chartParameters}) => {
         // generate the chart using the stated variables to the ref
         const svg = d3.select(svgRef.current)
             .attr("width", width)
-            .attr("height", (containerSize.height * .95))
-            .attr("viewBox", [0, 0, width, (containerSize.height * .95)])
+            .attr("height", (height))
+            .attr("viewBox", [0, 0, width, (height)])
             .attr("class", "svg-chart")
 
         //init load
@@ -532,7 +536,7 @@ const CandlestickChartContainer = ({list, chartParameters}) => {
                 .attr("width", width)
                 .attr("height", height)
                 .attr("fill", "#2a2e39")
-                .attr("style", "outline: thin solid red")
+                // .attr("style", "outline: thin solid red")
                 .attr("rx", "10")
                 .attr("ry", "10")
             
@@ -616,14 +620,14 @@ const CandlestickChartContainer = ({list, chartParameters}) => {
             svgGroup.append("g")
                 .attr("class", "svg-main-chart-Y-Axis")
                 .attr("transform", `translate(${marginLeft},0)`)
-                .style("font-size", "50px")
+                .style("font-size", "12px")
                 .call(yAxis)
                 .call(g => g.select(".domain").remove())
                 .call(g => g.selectAll(".tick line").clone()
                     .attr("fill", "#d1d4dc")
                     .attr("stroke", "#d1d4dc")
-                    .attr("stroke-opacity", 0.2)
-                    .attr("x2", width - marginLeft - marginRight))
+                    .attr("stroke-opacity", 0.2))
+                    // .attr("x2", width - marginLeft - marginRight))
                     
                 //Y Axis Label    
                 .call(g => g.append("text")
@@ -638,8 +642,6 @@ const CandlestickChartContainer = ({list, chartParameters}) => {
             //X Axis for candlesticks
             const g = svgGroup.append("g")
                 .attr("class", "vert-candlestick-across-x-axis")
-                // .attr("transform", `translate(${marginLeft}, ${marginBottom})`)
-                .attr("transform", `translate(6, ${marginBottom})`)
                 .attr("stroke", "#d1d4dc")
                 .attr("font-color", "#d1d4dc")
                 .attr("stroke-linecap", strokeLinecap)
@@ -657,14 +659,20 @@ const CandlestickChartContainer = ({list, chartParameters}) => {
             //Y Axis Candlesticks: Low High Stick
             g.append("line")
             .attr("y1", i => yScale(Yl[i]))
-            .attr("y2", i => yScale(Yh[i]));
+            .attr("y2", i => yScale(Yh[i]))
+            .attr("y1", i => yScale(height))
+            .attr("y2", i => yScale(height))
+            .attr("transform", `translate(6, ${height})`);
             
             //Y Axis Candlesticks: Open Close Candle
             g.append("line")
             .attr("y1", i => yScale(Yo[i]))
             .attr("y2", i => yScale(Yc[i]))
             .attr("stroke-width", (xScale.bandwidth()/2))
-            .attr("stroke", i => colors[1 + Math.sign(Yo[i] - Yc[i])]);
+            .attr("y1", i => yScale(height))
+            .attr("y2", i => yScale(height))
+            // .attr("stroke", i => colors[1 + Math.sign(Yo[i] - Yc[i])])
+            .attr("transform", `translate(6, ${height})`);
 
             // console.log(rsiHelper(chartObject, 0))
             // let rsi = rsiHelper(chartObject, 0);
@@ -723,8 +731,7 @@ const CandlestickChartContainer = ({list, chartParameters}) => {
             let g = d3.select('.svg-main-chart')
                 .append('g')
                 .attr("class", "vert-candlestick-across-x-axis")
-                // .attr("transform", `translate(${marginLeft}, ${marginBottom})`)
-                .attr("transform", `translate(6, ${marginBottom})`)
+                .attr("transform", `translate(15, 0)`)
                 .attr("stroke", "#d1d4dc")
                 .attr("fill", "#d1d4dc")
                 .attr("stroke-linecap", strokeLinecap)
@@ -741,11 +748,11 @@ const CandlestickChartContainer = ({list, chartParameters}) => {
                 .attr("y1", i => yScale(Yo[i]))
                 .attr("y2", i => yScale(Yc[i]))
                 .attr("stroke-width", (xScale.bandwidth()/2))
-                .attr("fill", "#d1d4dc")
                 .attr("stroke", i => colors[1 + Math.sign(Yo[i] - Yc[i])])
+                // .attr("transform", `translate(6, -${marginBottom})`);
             g.append("line")
                 .attr("class", "chartCursor")
-                .attr("y1", i => yScale(marginBottom))
+                .attr("y1", i => yScale(height))
                 .attr("y2", i => yScale(height))
                 .attr("stroke-width", xScale.bandwidth())
                 .attr("fill", "#d1d4dc")
@@ -768,7 +775,7 @@ const CandlestickChartContainer = ({list, chartParameters}) => {
                 .append("g")
                 .attr("class", "svg-main-chart-Y-Axis")
                 .attr("transform", `translate(${marginLeft},0)`)
-                .style("font-size", "28px")
+                .style("font-size", "15px")
                 .style("color", "#d1d4dc")
                 // .text("here")
                 .call(yAxis)
@@ -894,7 +901,7 @@ const CandlestickChartContainer = ({list, chartParameters}) => {
         
     }
 
-    const chartObjectHelper2 = async(longestPeriod, selectedPeriod, index) => {
+    const chartObjectHelperWithPeriod = async(longestPeriod, selectedPeriod, index) => {
         console.log(longestPeriod)
         console.log(selectedPeriod)
         console.log(stateHistoricalPrice)
@@ -1035,7 +1042,7 @@ const CandlestickChartContainer = ({list, chartParameters}) => {
     //helper functions calls the function that creates the charts
     const svgHelper = useCallback((viewSelector, index, longestPeriod) => {
         if(historicalPrice.length > 0){
-            let temp = chartObjectHelper2(longestPeriod, 0, index).then(res => {
+            let temp = chartObjectHelperWithPeriod(longestPeriod, 0, index).then(res => {
                 if(viewSelector === "candlestick"){
                     return CandlestickChart(res, chartParameters.taMethods.length);
                 }
@@ -1119,14 +1126,14 @@ const CandlestickChartContainer = ({list, chartParameters}) => {
                     //if we have the data already, do not run tickerHistoricalDataRange again
                     if(res1 === previousDates){
                         if(e === "RSI"){
-                            return chartObjectHelper2(longestPeriod, period, index)
+                            return chartObjectHelperWithPeriod(longestPeriod, period, index)
                             .then(chartData => {
                                 console.log(chartData)
                                 return rsiHelper(chartData, index)
                             })
                         }
                         if(e === "MACD"){
-                            return chartObjectHelper2(longestPeriod, period + 2, index)
+                            return chartObjectHelperWithPeriod(longestPeriod, period + 2, index)
                             .then(chartData => {
                                 console.log(chartData)
                                 return macdHelper(chartData, index)
@@ -1563,7 +1570,7 @@ const CandlestickChartContainer = ({list, chartParameters}) => {
             // .attr("viewBox", [500, 500, width, height])
             // .attr("fill", "#2D2A2E")
             .attr("fill", "#2a2e39")
-            .attr("style", "outline: thin solid red")
+            // .attr("style", "outline: thin solid red")
             // .attr("fill_opacity", "1")
         // .append("svg")
     // svg.append("g")
@@ -1798,15 +1805,9 @@ const CandlestickChartContainer = ({list, chartParameters}) => {
     }, [stateHistoricalPrice, chartParameters.view ])
 
     return (
-        <>
-            <Home.ChartWrapper
-                className = "ChartContainer"
-            >
-                <svg className = "svgEle"
-                    ref = {svgRef}
-                />
-            </Home.ChartWrapper>
-        </>
+        <svg className = "svgEle"
+            ref = {svgRef}
+        />
     )
 }
 

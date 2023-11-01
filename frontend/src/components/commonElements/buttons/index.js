@@ -1,27 +1,38 @@
-import { Container, Wrapper, StyledButton, Toggle, ToggleRow} from "./styles/buttons"
-
+// import { Container, Wrapper, StyledButton, Toggle, ToggleRow, ChartButton} from "./styles/buttons"
+import * as Styled from './styles/buttons'
+// import CandlestickChartIcon from '@mui/icons-material/CandlestickChart';
+// import ShowChartIcon from '@mui/icons-material/ShowChart';
 
 
 const Button = ({children, ...restProp}) => {
-    return<Container {...restProp} >{children} </Container>
+    return<Styled.Container {...restProp} >{children} </Styled.Container>
 }
 
 Button.Wrapper = ({children, ...restProp}) => {
-    return<Wrapper {...restProp} >{children} </Wrapper>
+    return<Styled.Wrapper {...restProp} >{children} </Styled.Wrapper>
 }
 
 Button.StyledButton = ({children, ...restProp}) => {
-    return<StyledButton {...restProp} >{children} </StyledButton>
+    return<Styled.StyledButton {...restProp} >{children} </Styled.StyledButton>
 }
 
 Button.Toggle = ({children, ...restProp}) => {
-    return<Toggle {...restProp}> {children} </Toggle>
+    return<Styled.Toggle {...restProp}> {children} </Styled.Toggle>
 }
 
 Button.ToggleRow = ({children, ...restProp}) => {
-    return<ToggleRow {...restProp}> {children} </ToggleRow>
+    return<Styled.ToggleRow {...restProp}> {children} </Styled.ToggleRow>
 }
 
+Button.ChartButton = ({children, ...restProp}) => {
+    return<Styled.ChartButton {...restProp}> {children} </Styled.ChartButton>
+}
+
+Button.CandlestickChartIcon = ({children, ...restProps}) => {
+    return<Styled.CandlestickChartIcon {...restProps}> {children} </Styled.CandlestickChartIcon>
+}
+
+export default Button
 export {
     Button
 }

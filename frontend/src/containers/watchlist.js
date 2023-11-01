@@ -7,11 +7,15 @@ import {createList, getLists, deleteList, addTicker, deleteTicker} from '../feat
 import {getPrice, getBulkLatestPrice, reset} from '../features/iex/core/latestPriceSlice'
 import Home from "../components/pages/home/index.js"
 import Form from '../components/commonElements/list'
+import Button from "../components/commonElements/buttons"
 import {getHistoricalData, getSpecificHistoricalData} from '../features/iex/core/historicalPriceSlice'
 import {CandlestickChartContainer} from './candlestickchart'
 import {NewsfeedContainer} from './newsfeed'
 // import { StyledButton } from '../components/commonElements/list/styles/form';
 import { ThemeProvider } from 'styled-components';
+import CandlestickChartIcon from '@mui/icons-material/CandlestickChart';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
+
 
 function WatchlistContainer() {
     const navigate = useNavigate();
@@ -231,52 +235,58 @@ function WatchlistContainer() {
 
     return (
         <>
+            {/* <CandlestickChartIcon/> */}
             <Home>
                 {/**Wrapper holds the chart part(in home.js) */}
 
-                <Home.Wrapper className = "leftColumn">
-
-
-                </Home.Wrapper>
-
                 <Home.Wrapper className = "middleColumn">
-                    <Home.ChartControllerWrapper>
-                        <Form.Wrapper>
-                            <button onClick={() => chartParametersHelper("view", "candlestick")}>Candlestick</button>
-                            <button onClick={() => chartParametersHelper("view", "line")}>Line</button>
-                            {/* <button onClick={() => chartParametersHelper(0, 'all')}>Technical Analysis</button> */}
-                            <button onClick={() => chartParametersHelper("ta", 'RSI')}>RSI</button>
-                            <button onClick={() => chartParametersHelper("ta", 'MACD')}>MACD</button>
-                            <button onClick={() => chartParametersHelper("ta", 'SRSI')}>Stochastic RSI</button>
-
-                            <button onClick = {() => chartParametersHelper("fixedRange", "1d")}>1d</button>
-                            <button onClick = {() => chartParametersHelper("fixedRange", "5d")}>5d</button>
-                            <button onClick = {() => chartParametersHelper("fixedRange", "1m")}>1m</button>
-                            <button onClick = {() => chartParametersHelper("fixedRange", "3m")}>3m</button>
-                            <button onClick = {() => chartParametersHelper("fixedRange", "6m")}>6m</button>
-                            <button onClick = {() => chartParametersHelper("fixedRange", "ytd")}>ytd</button>
-                            <button onClick = {() => chartParametersHelper("fixedRange", "1y")}>1y</button>
-                            <button onClick = {() => chartParametersHelper("fixedRange", "5y")}>5y</button>
-
-
-                            <Form.TextInput>
-                            <Form.Wrapper1>
-                                First Day
-                                <Form.StyledInput type = 'date' name = 'firstDay'></Form.StyledInput>
-                                Last Day
-                                <Form.StyledInput type = 'date' name = 'lastDay'></Form.StyledInput>
-                            </Form.Wrapper1>
+                    {/* <Home.ChartControllerWrapper> */}
+                        {/* <Form.Wrapper> */}
+                        <Home.ChartWrapper className = "ChartContainer">
                             
-                            <Form.StyledButton type = 'submit'>
-                                Range
-                            </Form.StyledButton>
-                        </Form.TextInput>
-                        </Form.Wrapper>
-                    </Home.ChartControllerWrapper>
-                    <CandlestickChartContainer
-                        list = {chartParameters.ticker}
-                        chartParameters = {chartParameters}
-                    />
+                            <Home.ChartControllerWrapper>
+                                <Button.ChartButton onClick={() => chartParametersHelper("view", "candlestick")}>Candlestick</Button.ChartButton>
+                                <Button.ChartButton onClick={() => chartParametersHelper("view", "line")}>Line</Button.ChartButton>
+                                {/* <Button.ChartButton onClick={() => chartParametersHelper(0, 'all')}>Technical Analysis</Button.ChartButton> */}
+                                <Button.ChartButton onClick={() => chartParametersHelper("ta", 'RSI')}>RSI</Button.ChartButton>
+                                <Button.ChartButton onClick={() => chartParametersHelper("ta", 'MACD')}>MACD</Button.ChartButton>
+                                <Button.ChartButton onClick={() => chartParametersHelper("ta", 'SRSI')}>Stochastic RSI</Button.ChartButton>
+                            </Home.ChartControllerWrapper>
+                            <CandlestickChartContainer
+                                list = {chartParameters.ticker}
+                                chartParameters = {chartParameters}
+                            />
+                            <Home.ChartControllerWrapper>
+                                <Button.ChartButton onClick = {() => chartParametersHelper("fixedRange", "1d")}>1d</Button.ChartButton>
+                                <Button.ChartButton onClick = {() => chartParametersHelper("fixedRange", "5d")}>5d</Button.ChartButton>
+                                <Button.ChartButton onClick = {() => chartParametersHelper("fixedRange", "1m")}>1m</Button.ChartButton>
+                                <Button.ChartButton onClick = {() => chartParametersHelper("fixedRange", "3m")}>3m</Button.ChartButton>
+                                <Button.ChartButton onClick = {() => chartParametersHelper("fixedRange", "6m")}>6m</Button.ChartButton>
+                                <Button.ChartButton onClick = {() => chartParametersHelper("fixedRange", "ytd")}>ytd</Button.ChartButton>
+                                <Button.ChartButton onClick = {() => chartParametersHelper("fixedRange", "1y")}>1y</Button.ChartButton>
+                                <Button.ChartButton onClick = {() => chartParametersHelper("fixedRange", "5y")}>5y</Button.ChartButton>
+                            </Home.ChartControllerWrapper>
+
+                            {/* <Home.ChartControllerWrapper>
+                                <Form.TextInput>
+                                    <Form.Wrapper1>
+                                        First Day
+                                        <Form.StyledInput type = 'date' name = 'firstDay'></Form.StyledInput>
+                                        Last Day
+                                        <Form.StyledInput type = 'date' name = 'lastDay'></Form.StyledInput>
+                                    </Form.Wrapper1>
+                                    
+                                    <Form.StyledButton type = 'submit'>
+                                        Range
+                                    </Form.StyledButton>
+                                </Form.TextInput>
+                            </Home.ChartControllerWrapper> */}
+                        {/* </Form.Wrapper> */}
+
+                        <Home.Card>test</Home.Card>
+                        </Home.ChartWrapper>
+                    {/* </Home.ChartControllerWrapper> */}
+
                 </Home.Wrapper>
 
 
@@ -288,7 +298,7 @@ function WatchlistContainer() {
                 {/* </Home.ChartWrapper> */}
 
 
-                <Home.Wrapper className = "rightColumn">
+                <Home.Wrapper1 className = "rightColumn">
                                         {/* Function: Creates a new watchlist */}
                     {/* <ThemeProvider theme = {}> */}
                     <Home.BalanceWrapper>
@@ -309,7 +319,7 @@ function WatchlistContainer() {
                     {/* <Form></Form> */}
                     
                     {/**Form controls the watchlist part */}
-                    <Form className = "leftColumn Wrapper">
+                    <Form className = "rightColumn Wrapper">
                         <Form.StyledTable className = "WatchlistTable">
                                 <Form.StyledTBody>
                                     {priceObject[0] && priceObject[0].length !== 0 &&
@@ -355,7 +365,7 @@ function WatchlistContainer() {
                     <NewsfeedContainer
                     ticker = {chartParameters.ticker}
                     />
-                </Home.Wrapper>
+                </Home.Wrapper1>
 
             </Home>
         </>

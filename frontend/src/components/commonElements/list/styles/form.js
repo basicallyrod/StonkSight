@@ -3,6 +3,7 @@ import { gsap } from "gsap";
 import { Link } from 'react-router-dom';
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+// import { devices } from '../../../constants';
 
 
 
@@ -18,8 +19,9 @@ const Container = styled.div`
     /* height: 66%; */
     height: 33vh;
     overflow-y: scroll;
-    box-shadow: 5px 10px 15px #333
-      ,6px 12px 15px #222;
+    scroll-snap-type:y mandatory;
+    /* box-shadow: 5px 10px 15px #333 */
+      /* ,6px 12px 15px #222; */
       /* 10px 20px #222; */
     /* height: 200px; */
     /* display: table;
@@ -152,7 +154,7 @@ const StyledTable = styled.table`
 `
 
 const StyledTBody1 = styled.tbody`
-background: hsl(52 78% 40%);
+/* background: hsl(52 78% 40%); */
 /* background: ${props => props.watchlistChange ? "red" : "green"};; */
 border: solid;
 border-radius: 10px;

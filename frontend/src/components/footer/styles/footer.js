@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-
+// import { devices } from '../../constants';
 const Container = styled.div`
         padding: 80px 60px;
         background: #9E9A9A;

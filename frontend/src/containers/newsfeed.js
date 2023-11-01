@@ -39,14 +39,27 @@ const NewsfeedContainer = ({ticker}) => {
             articlesArray.map((article, key) => {
                 return(
                     <>
-                        
-                        <Home.Card>
+                        <Home.Row className = "row">
 
-                            <Home.Subtitle>{article.headline}</Home.Subtitle>
-                            <Home.Text>{article.source}</Home.Text>
-                            {/* <p>{article.summary}</p> */}
-                            <a href = {article.url} target = "_blank"> read more</a>
-                        </Home.Card>
+                        
+                            
+                            <Home.Card onClick>
+                                {/* <div> */}
+                                {/* <text>{article.headline}</text> */}
+                                {/* <text>{article.source}</text> */}
+                                <a href = {article.url} target = "_blank">
+                                    <Home.Title>{article.headline}</Home.Title>
+                                    <Home.Subtitle>{article.source} </Home.Subtitle>
+                                    <Home.Subtitle>{article.datetime} </Home.Subtitle>
+                                    <Home.Text>{article.summary}</Home.Text>
+                                </a>
+
+                                {/* </div> */}
+
+                                {/* <p>{article.summary}</p> */}
+                                {/* <a href = {article.url} target = "_blank"> read more</a> */}
+                            </Home.Card>
+                        </Home.Row>
 
                     </>
                 )

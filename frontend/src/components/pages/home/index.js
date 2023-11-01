@@ -1,5 +1,5 @@
 import { Container, Wrapper, CenterWrapper, BalanceWrapper, Wrapper1, ChartWrapper, ChartControllerWrapper, NewsfeedWrapper,  Background, 
-    BackgroundContent, TexturedBody, Picture, Logo, Row, UnderlineRow, Column, Body, InnerBody, OuterBody,
+    BackgroundContent,  Picture, Logo, Row, UnderlineRow, Column, Body, InnerBody, 
     Link, StyledLink, Title, Subtitle,
     Education, Project, LeftColumn, RightColumn, Text,
     List, UList, CarouselWrapper, Button, Form, Card } 
@@ -63,14 +63,6 @@ Home.Column = ({ children, ...restProps}) => {
 
 Home.Body = ({ children, ...restProps }) => {
     return <Body {...restProps}> {children} </Body>;
-};
-
-Home.TexturedBody = ({ children, ...restProps }) => {
-    return <TexturedBody {...restProps}> {children} </TexturedBody>;
-};
-
-Home.OuterBody = ({ children, ...restProps }) => {
-    return <OuterBody {...restProps}> {children} </OuterBody>;
 };
 
 Home.InnerBody = ({ children, ...restProps }) => {

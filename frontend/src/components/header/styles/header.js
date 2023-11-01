@@ -1,6 +1,7 @@
 // import React from 'react';
 import {Route, Link} from 'react-router-dom';
 import styled from 'styled-components';
+// import { devices } from '../../constants';
 
 const Container = styled.div`
     position: relative;
